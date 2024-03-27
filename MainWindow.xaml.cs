@@ -17,12 +17,15 @@ namespace MiniRambo
     {
         public Canvas Main_Window { get; set; }
         private Player_Info Player;
-
+        private Game_Border Border;
         public MainWindow()
         {
             InitializeComponent();
             Main_Window = gameCanvas;
-            Player = new Player_Info(400, 300, Main_Window);
+
+            Border = new Game_Border(gameCanvas.Height, gameCanvas.Width, Main_Window);
+            Player = new Player_Info(Main_Window, Border);
+
         }
 
         public async Task GameSpeed()
@@ -59,5 +62,6 @@ namespace MiniRambo
         {
             Player.Shoot();
         }
+
     }
 }

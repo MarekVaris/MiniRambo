@@ -15,17 +15,19 @@ namespace MiniRambo
         public double X { get; set; }
         public double Y { get; set; }
         public double Angle { get; set; }
+        public Game_Border Main_Border { get; set; }
         private Ellipse Player { get; set; }
         private Canvas Main_Canvas { get; set; }
         private List<double> CurrentMove = new List<double> { 0, 0 };
         private double Speed { get; set; } = 2;
         private double MouseX, MouseY;
 
-        public Player_Info(double x, double y, Canvas main_canvas)
+        public Player_Info(Canvas mainCanvas, Game_Border gameBorder)
         {
-            X = x;
-            Y = y;
-            Main_Canvas = main_canvas;
+            X = mainCanvas.Width / 2;
+            Y = mainCanvas.Height / 2;
+            Main_Border = gameBorder;
+            Main_Canvas = mainCanvas;
             Player = CreatePlayer();
         }
 
@@ -58,8 +60,15 @@ namespace MiniRambo
             double currentLeft = Canvas.GetLeft(Player);
             double currentTop = Canvas.GetTop(Player);
 
-            currentTop += Speed * CurrentMove[0];
-            currentLeft += Speed * CurrentMove[1];
+            if (currentLeft < 0) currentLeft = 1 * Speed;
+            else if (currentLeft > Main_Border.Width - Player.Width) currentLeft += -1 * Speed;
+            else if (currentTop < 0) currentTop += 1 * Speed;
+            else if (currentTop > Main_Border.Height - Player.Height) currentTop += -1 * Speed;
+            else
+            {
+                currentTop += Speed * CurrentMove[0];
+                currentLeft += Speed * CurrentMove[1];
+            }
 
             Canvas.SetLeft(Player, currentLeft);
             Canvas.SetTop(Player, currentTop);
@@ -104,7 +113,7 @@ namespace MiniRambo
             X = Canvas.GetLeft(Player);
             Y = Canvas.GetTop(Player);
 
-            new Projectile(this, Main_Canvas);
+            _ = new Projectile(this, Main_Canvas, Main_Border);
         }
     }
 }
