@@ -15,15 +15,13 @@ namespace MiniRambo
 
         private Ellipse Bullet;
         private Canvas Main_Canvas;
-        private Player_Info Parent;
-        private Game_Border Main_Border;
+        private Player_Info Player;
 
-        public Projectile(Player_Info parent, Canvas main_canvas, Game_Border border)
+        public Projectile(Player_Info parent, Canvas main_canvas)
         {
             Main_Canvas = main_canvas;
-            Parent = parent;
-            Angle = Parent.Angle;
-            Main_Border = border;
+            Player = parent;
+            Angle = Player.Angle;
             Bullet = CreateProjectile();
             _ = MoveBullet();
         }
@@ -36,11 +34,10 @@ namespace MiniRambo
             bulletEllipse.Stroke = Brushes.Black;
             bulletEllipse.Fill = Brushes.Black;
 
-            Canvas.SetLeft(bulletEllipse, Parent.X);
-            Canvas.SetTop(bulletEllipse, Parent.Y);
+            Canvas.SetLeft(bulletEllipse, Player.X);
+            Canvas.SetTop(bulletEllipse, Player.Y);
 
             Main_Canvas.Children.Add(bulletEllipse);
-
 
             RotateTransform rotateTransform = new RotateTransform();
             rotateTransform.Angle = Angle;
@@ -64,7 +61,7 @@ namespace MiniRambo
                 Canvas.SetLeft(Bullet, Canvas.GetLeft(Bullet) + deltaX);
                 Canvas.SetTop(Bullet, Canvas.GetTop(Bullet) + deltaY);
 
-                if (Canvas.GetLeft(Bullet) < 0 || Canvas.GetLeft(Bullet) > Main_Border.Width || Canvas.GetTop(Bullet) < 0 || Canvas.GetTop(Bullet) > Main_Border.Height)
+                if (Canvas.GetLeft(Bullet) < 0 || Canvas.GetLeft(Bullet) > Main_Canvas.Width || Canvas.GetTop(Bullet) < 0 || Canvas.GetTop(Bullet) > Main_Canvas.Height)
                 {
                     Main_Canvas.Children.Remove(Bullet);
                     break;

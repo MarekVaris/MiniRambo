@@ -15,32 +15,39 @@ namespace MiniRambo
 {
     public partial class MainWindow : Window
     {
-        public Canvas Main_Window { get; set; }
+        public int Enemy_Spawning_Rate = 0;
+
+        public Canvas Main_Canvas { get; set; }
         private Player_Info Player;
-        private Game_Border Border;
-        private Enemy NewEnemy;
+        private List<Enemy> AllEnemies;
 
         public MainWindow()
         {
             InitializeComponent();
-            Main_Window = gameCanvas;
-
-            Border = new Game_Border(gameCanvas.Height, gameCanvas.Width, Main_Window);
-            Player = new Player_Info(Main_Window, Border);
-            NewEnemy = new Enemy(Main_Window);
+            Main_Canvas = gameCanvas;
+            AllEnemies = new List<Enemy>();
+            Player = new Player_Info(Main_Canvas);
         }
 
-        public async Task GameSpeed()
+        public async Task GameStart()
         {
             while (true)
             {
-                await Task.Delay(10);
                 Player.PlayerMove();
+
+                if(Enemy_Spawning_Rate > 100)
+                {
+                    AllEnemies.Add(new Enemy(Main_Canvas, Player));
+                    Enemy_Spawning_Rate = 0;
+                }
+
+                Enemy_Spawning_Rate++;
+                await Task.Delay(10);
             }
         }
         private async void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            await GameSpeed();
+            await GameStart();
         }
 
         private void WindowKeyDown(object sender, KeyEventArgs e)
