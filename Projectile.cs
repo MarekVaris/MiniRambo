@@ -67,7 +67,6 @@ namespace MiniRambo
                 if (Canvas.GetLeft(Bullet) < 0 || Canvas.GetLeft(Bullet) > Main_Border.Width || Canvas.GetTop(Bullet) < 0 || Canvas.GetTop(Bullet) > Main_Border.Height)
                 {
                     Main_Canvas.Children.Remove(Bullet);
-                    Trace.WriteLine("dell");
                     break;
                 }
 

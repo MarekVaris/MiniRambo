@@ -18,6 +18,8 @@ namespace MiniRambo
         public Canvas Main_Window { get; set; }
         private Player_Info Player;
         private Game_Border Border;
+        private Enemy NewEnemy;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -25,7 +27,7 @@ namespace MiniRambo
 
             Border = new Game_Border(gameCanvas.Height, gameCanvas.Width, Main_Window);
             Player = new Player_Info(Main_Window, Border);
-
+            NewEnemy = new Enemy(Main_Window);
         }
 
         public async Task GameSpeed()
