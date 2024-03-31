@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Reflection.Metadata;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -8,20 +9,30 @@ using System.Windows.Shapes;
 
 namespace MiniRambo
 {
-    class Projectile
+    public class Projectile
     {
-        public int Speed = 5;
+        private double Speed = 5;
+        private bool FromEnemy { get; set; }
         private double Angle { get; set; }
-
-        private Ellipse Bullet;
-        private Canvas Main_Canvas;
+        private List<Enemy> AllEnemies { get; set; }
         private Player_Info Player;
+        private Canvas Main_Canvas;
+        private Ellipse Bullet;
+        
 
-        public Projectile(Player_Info parent, Canvas main_canvas)
+        public Projectile(bool isEnemy)
         {
-            Main_Canvas = main_canvas;
-            Player = parent;
-            Angle = Player.Angle;
+            if (MainWindow.Instance != null && MainWindow.Instance.Player != null)
+            {
+                AllEnemies = MainWindow.Instance.AllEnemies;
+                Player = MainWindow.Instance.Player;
+                Angle = Player.Angle;
+                Main_Canvas = Player.Main_Canvas;
+            }
+            else
+                throw new InvalidOperationException();
+            FromEnemy = isEnemy;
+            if (isEnemy) Speed = 1;
             Bullet = CreateProjectile();
             _ = MoveBullet();
         }
@@ -48,6 +59,31 @@ namespace MiniRambo
             return bulletEllipse; 
         }
 
+        private bool ProjectileTouched()
+        {
+            Rect projectile = new Rect(Canvas.GetLeft(Bullet), Canvas.GetTop(Bullet), Bullet.Width, Bullet.Height);
+            if (FromEnemy)
+            {
+                if (projectile.IntersectsWith(Player.Player_Hitbox))
+                {
+                    Player.PlayerHit(1);
+                    return true;
+                }
+            }
+            else
+            {
+                foreach (Enemy enemy in AllEnemies)
+                {
+                    if (projectile.IntersectsWith(enemy.Enemy_Hitbox) && enemy.Allive)
+                    {
+                        enemy.EnemyHit(1);
+                        Main_Canvas.Children.Remove(Bullet);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         private async Task MoveBullet()
         {
@@ -66,6 +102,8 @@ namespace MiniRambo
                     Main_Canvas.Children.Remove(Bullet);
                     break;
                 }
+                if (ProjectileTouched())
+                    break;
 
                 await Task.Delay(10);
             }

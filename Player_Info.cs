@@ -7,27 +7,37 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Drawing;
+using System.Windows;
 
 namespace MiniRambo
 {
-    internal class Player_Info
+    public class Player_Info
     {
+        public int Hp = 5;
         public double X { get; set; }
         public double Y { get; set; }
         public double Angle { get; set; }
+        public Canvas Main_Canvas { get; set; }
+        public Rect Player_Hitbox { get; set; }
 
-        private Ellipse Player { get; set; }
-        private Canvas Main_Canvas { get; set; }
+        private Ellipse Player_Ellipse { get; set; }
         private List<double> CurrentMove = new List<double> { 0, 0 };
         private double Speed { get; set; } = 2;
         private double MouseX, MouseY;
+        private bool PlayerHitCooldow = true;
 
-        public Player_Info(Canvas mainCanvas)
+        public Player_Info()
         {
-            X = mainCanvas.Width / 2;
-            Y = mainCanvas.Height / 2;
-            Main_Canvas = mainCanvas;
-            Player = CreatePlayer();
+            if (MainWindow.Instance != null)
+            {
+                Main_Canvas = MainWindow.Instance.Main_Canvas;
+                X = Main_Canvas.Width / 2;
+                Y = Main_Canvas.Height / 2;
+            }
+            else
+                throw new InvalidOperationException();
+
+            Player_Ellipse = CreatePlayer();
         }
 
         public Ellipse CreatePlayer()
@@ -38,7 +48,7 @@ namespace MiniRambo
             playerEllipse.Stroke = Brushes.Black;
 
             ImageBrush imageBrush = new ImageBrush();
-            imageBrush.ImageSource = new BitmapImage(new Uri("../../../Img/rambo.jpeg", UriKind.Relative));
+            imageBrush.ImageSource = new BitmapImage(new Uri("../../../Img/Rambo.png", UriKind.Relative));
             playerEllipse.Fill = imageBrush;
 
             Canvas.SetLeft(playerEllipse, X);
@@ -56,34 +66,35 @@ namespace MiniRambo
 
         public void PlayerMove()
         {
-
-            double currentLeft = Canvas.GetLeft(Player);
-            double currentTop = Canvas.GetTop(Player);
+            double currentLeft = Canvas.GetLeft(Player_Ellipse);
+            double currentTop = Canvas.GetTop(Player_Ellipse);
 
             if (currentLeft < 0) currentLeft = 1 * Speed;
-            else if (currentLeft > Main_Canvas.Width - Player.Width) currentLeft += -1 * Speed;
+            else if (currentLeft > Main_Canvas.Width - Player_Ellipse.Width) currentLeft += -1 * Speed;
             else if (currentTop < 0) currentTop += 1 * Speed;
-            else if (currentTop > Main_Canvas.Height - Player.Height) currentTop += -1 * Speed;
+            else if (currentTop > Main_Canvas.Height - Player_Ellipse.Height) currentTop += -1 * Speed;
             else
             {
                 currentTop += Speed * CurrentMove[0];
                 currentLeft += Speed * CurrentMove[1];
             }
 
-            Canvas.SetLeft(Player, currentLeft);
-            Canvas.SetTop(Player, currentTop);
+            Canvas.SetLeft(Player_Ellipse, currentLeft);
+            Canvas.SetTop(Player_Ellipse, currentTop);
             MoveAngle(MouseX, MouseY);
 
-            X = Canvas.GetLeft(Player);
-            Y = Canvas.GetTop(Player);
+            X = Canvas.GetLeft(Player_Ellipse);
+            Y = Canvas.GetTop(Player_Ellipse);
+
+            Player_Hitbox = new Rect(currentLeft, currentTop, Player_Ellipse.Width, Player_Ellipse.Height);
         }
 
         public void MoveAngle(double x, double y)
         {
             MouseX = x;
             MouseY = y;
-            double angle = Math.Atan2(y - Canvas.GetTop(Player), x - Canvas.GetLeft(Player)) * (180 / Math.PI);
-            RotateTransform? rotateTransform = Player.RenderTransform as RotateTransform;
+            double angle = Math.Atan2(y - Canvas.GetTop(Player_Ellipse), x - Canvas.GetLeft(Player_Ellipse)) * (180 / Math.PI);
+            RotateTransform? rotateTransform = Player_Ellipse.RenderTransform as RotateTransform;
             if (rotateTransform != null)
             {
                 Angle = rotateTransform.Angle;
@@ -110,9 +121,27 @@ namespace MiniRambo
             }
         }
 
+        public async void PlayerHit(int dmg)
+        {
+            if (PlayerHitCooldow)
+            {
+                PlayerHitCooldow = false;
+                Hp -= dmg;
+                for (int i = 0; i < 3; i++)
+                {
+                    Player_Ellipse.Opacity = 0.3;
+                    await Task.Delay(500); 
+
+                    Player_Ellipse.Opacity = 1.0;
+                    await Task.Delay(500);
+                }
+                PlayerHitCooldow = true;
+            }
+        }
+
         public void Shoot()
         {
-            _ = new Projectile(this, Main_Canvas);
+            _ = new Projectile(false);
         }
     }
 }

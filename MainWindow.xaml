@@ -7,14 +7,14 @@
     xmlns:local="clr-namespace:MiniRambo"
     mc:Ignorable="d"
     Loaded="WindowLoaded"
-    Title="MainWindow" 
+    Title="MiniRambo" 
     Height="600"
     Width="800"
     Background="DarkSlateGray"
     KeyDown="WindowKeyDown"
     KeyUp="WindowKeyUp"
     MouseMove="WinMouseMove"
-    MouseDown="WinMouseClick">
+    MouseLeftButtonDown="WinMouseClick">
 
     <Viewbox Stretch="Fill">
 

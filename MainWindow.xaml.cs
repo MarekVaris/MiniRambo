@@ -6,10 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MiniRambo
 {
@@ -18,26 +14,29 @@ namespace MiniRambo
         public int Enemy_Spawning_Rate = 0;
 
         public Canvas Main_Canvas { get; set; }
-        private Player_Info Player;
-        private List<Enemy> AllEnemies;
+        public List<Enemy> AllEnemies { get; set; }
+        public Player_Info Player;
+        public static MainWindow? Instance { get; private set; }
 
         public MainWindow()
         {
             InitializeComponent();
+            Instance = this;
             Main_Canvas = gameCanvas;
+
+            Player = new Player_Info();
             AllEnemies = new List<Enemy>();
-            Player = new Player_Info(Main_Canvas);
         }
 
         public async Task GameStart()
         {
-            while (true)
+            while (Player.Hp > 0)
             {
                 Player.PlayerMove();
 
-                if(Enemy_Spawning_Rate > 100)
+                if (Enemy_Spawning_Rate > 100)
                 {
-                    AllEnemies.Add(new Enemy(Main_Canvas, Player));
+                    AllEnemies.Add(new Enemy());
                     Enemy_Spawning_Rate = 0;
                 }
 
