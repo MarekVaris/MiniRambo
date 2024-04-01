@@ -12,26 +12,27 @@ namespace MiniRambo
     public class Projectile
     {
         private double Speed = 5;
-        private bool FromEnemy { get; set; }
+        private bool From_Enemy { get; set; }
         private double Angle { get; set; }
-        private List<Enemy> AllEnemies { get; set; }
+        private List<Enemy> All_Enemies { get; set; }
         private Player_Info Player;
         private Canvas Main_Canvas;
         private Ellipse Bullet;
-        
+        private Gun Gun_Using;
 
-        public Projectile(bool isEnemy)
+        public Projectile(Gun gunUsing, bool isEnemy)
         {
             if (MainWindow.Instance != null && MainWindow.Instance.Player != null)
             {
-                AllEnemies = MainWindow.Instance.AllEnemies;
+                All_Enemies = MainWindow.Instance.All_Enemies;
                 Player = MainWindow.Instance.Player;
                 Angle = Player.Angle;
                 Main_Canvas = Player.Main_Canvas;
             }
             else
                 throw new InvalidOperationException();
-            FromEnemy = isEnemy;
+            Gun_Using = gunUsing;
+            From_Enemy = isEnemy;
             if (isEnemy) Speed = 1;
             Bullet = CreateProjectile();
             _ = MoveBullet();
@@ -45,8 +46,8 @@ namespace MiniRambo
             bulletEllipse.Stroke = Brushes.Black;
             bulletEllipse.Fill = Brushes.Black;
 
-            Canvas.SetLeft(bulletEllipse, Player.X);
-            Canvas.SetTop(bulletEllipse, Player.Y);
+            Canvas.SetLeft(bulletEllipse, Gun_Using.Parent_Top);
+            Canvas.SetTop(bulletEllipse, Gun_Using.Parent_Left);
 
             Main_Canvas.Children.Add(bulletEllipse);
 
@@ -62,7 +63,7 @@ namespace MiniRambo
         private bool ProjectileTouched()
         {
             Rect projectile = new Rect(Canvas.GetLeft(Bullet), Canvas.GetTop(Bullet), Bullet.Width, Bullet.Height);
-            if (FromEnemy)
+            if (From_Enemy)
             {
                 if (projectile.IntersectsWith(Player.Player_Hitbox))
                 {
@@ -72,7 +73,7 @@ namespace MiniRambo
             }
             else
             {
-                foreach (Enemy enemy in AllEnemies)
+                foreach (Enemy enemy in All_Enemies)
                 {
                     if (projectile.IntersectsWith(enemy.Enemy_Hitbox) && enemy.Allive)
                     {

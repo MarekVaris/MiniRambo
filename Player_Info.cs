@@ -8,23 +8,27 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Drawing;
 using System.Windows;
+using System.Numerics;
 
 namespace MiniRambo
 {
     public class Player_Info
     {
         public int Hp = 5;
-        public double X { get; set; }
-        public double Y { get; set; }
-        public double Angle { get; set; }
+        public double Speed { get; set; } = 2;
+
+        public Gun Player_Gun { get; set; }
         public Canvas Main_Canvas { get; set; }
         public Rect Player_Hitbox { get; set; }
 
-        private Ellipse Player_Ellipse { get; set; }
-        private List<double> CurrentMove = new List<double> { 0, 0 };
-        private double Speed { get; set; } = 2;
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Angle { get; set; }
+
         private double MouseX, MouseY;
-        private bool PlayerHitCooldow = true;
+        private List<double> Current_Move = new List<double> { 0, 0 };
+        private Ellipse Player_Ellipse { get; set; }
+        private bool Player_Hit_Cooldow = true;
 
         public Player_Info()
         {
@@ -36,7 +40,7 @@ namespace MiniRambo
             }
             else
                 throw new InvalidOperationException();
-
+            Player_Gun = new Gun(12, 2000, true);
             Player_Ellipse = CreatePlayer();
         }
 
@@ -75,8 +79,8 @@ namespace MiniRambo
             else if (currentTop > Main_Canvas.Height - Player_Ellipse.Height) currentTop += -1 * Speed;
             else
             {
-                currentTop += Speed * CurrentMove[0];
-                currentLeft += Speed * CurrentMove[1];
+                currentTop += Speed * Current_Move[0];
+                currentLeft += Speed * Current_Move[1];
             }
 
             Canvas.SetLeft(Player_Ellipse, currentLeft);
@@ -107,25 +111,32 @@ namespace MiniRambo
             switch (e.Key)
             {
                 case Key.A:
-                    CurrentMove[1] = idle ? 0 : -1;
+                    if (Current_Move[1] == 1) break;
+                    Current_Move[1] = idle ? 0 : -1;
                     break;
                 case Key.D:
-                    CurrentMove[1] = idle ? 0 : 1;
+                    if (Current_Move[1] == -1) break;
+                    Current_Move[1] = idle ? 0 : 1;
                     break;
                 case Key.W:
-                    CurrentMove[0] = idle ? 0 : -1;
+                    if (Current_Move[0] == 1) break;
+                    Current_Move[0] = idle ? 0 : -1;
                     break;
                 case Key.S:
-                    CurrentMove[0] = idle ? 0 : 1;
+                    if (Current_Move[0] == -1) break;
+                    Current_Move[0] = idle ? 0 : 1;
+                    break;
+                case Key.R:
+                    Player_Gun.Reload();
                     break;
             }
         }
 
         public async void PlayerHit(int dmg)
         {
-            if (PlayerHitCooldow)
+            if (Player_Hit_Cooldow)
             {
-                PlayerHitCooldow = false;
+                Player_Hit_Cooldow = false;
                 Hp -= dmg;
                 for (int i = 0; i < 3; i++)
                 {
@@ -135,13 +146,8 @@ namespace MiniRambo
                     Player_Ellipse.Opacity = 1.0;
                     await Task.Delay(500);
                 }
-                PlayerHitCooldow = true;
+                Player_Hit_Cooldow = true;
             }
-        }
-
-        public void Shoot()
-        {
-            _ = new Projectile(false);
         }
     }
 }

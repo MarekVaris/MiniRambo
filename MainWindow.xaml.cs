@@ -14,18 +14,18 @@ namespace MiniRambo
         public int Enemy_Spawning_Rate = 0;
 
         public Canvas Main_Canvas { get; set; }
-        public List<Enemy> AllEnemies { get; set; }
-        public Player_Info Player;
+        public List<Enemy> All_Enemies { get; set; }
+        public Player_Info Player {  get; set; }
         public static MainWindow? Instance { get; private set; }
 
         public MainWindow()
         {
             InitializeComponent();
             Instance = this;
-            Main_Canvas = gameCanvas;
 
+            Main_Canvas = gameCanvas;
             Player = new Player_Info();
-            AllEnemies = new List<Enemy>();
+            All_Enemies = new List<Enemy>();
         }
 
         public async Task GameStart()
@@ -36,7 +36,7 @@ namespace MiniRambo
 
                 if (Enemy_Spawning_Rate > 100)
                 {
-                    AllEnemies.Add(new Enemy());
+                    All_Enemies.Add(new Enemy());
                     Enemy_Spawning_Rate = 0;
                 }
 
@@ -68,7 +68,7 @@ namespace MiniRambo
 
         private void WinMouseClick(object sender, MouseEventArgs e)
         {
-            Player.Shoot();
+            Player.Player_Gun.Shoot(Player.X, Player.Y);
         }
 
     }

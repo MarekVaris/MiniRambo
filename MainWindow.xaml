@@ -8,20 +8,28 @@
     mc:Ignorable="d"
     Loaded="WindowLoaded"
     Title="MiniRambo" 
-    Height="600"
-    Width="800"
+    Width="1280"
+    Height="1024"
     Background="DarkSlateGray"
     KeyDown="WindowKeyDown"
     KeyUp="WindowKeyUp"
-    MouseMove="WinMouseMove"
-    MouseLeftButtonDown="WinMouseClick">
+    MouseLeftButtonDown="WinMouseClick"
+    MouseMove="WinMouseMove">
 
     <Viewbox Stretch="Fill">
-
         <Canvas 
             x:Name="gameCanvas"
-            Height="600"
-            Width="800">
+            Width="1280"
+            Height="1024">
+            <TextBlock
+                x:Name="ammoText"    
+                Width="270"
+                Height="55"
+                Canvas.Top="970"
+                Text=""
+                FontSize="40">
+
+            </TextBlock>
         </Canvas>
     </Viewbox>
 </Window>

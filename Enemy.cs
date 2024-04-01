@@ -15,6 +15,8 @@ namespace MiniRambo
 {
     public class Enemy
     {
+        public double X { get; set; }
+        public double Y { get; set; }
         public Rect Enemy_Hitbox { get; set; }
         public bool Allive { get; set; } = true;
         private int Hp { get; set; } = 2;
