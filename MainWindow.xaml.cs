@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace MiniRambo
 {
@@ -28,9 +30,12 @@ namespace MiniRambo
             All_Enemies = new List<Enemy>();
         }
 
-        public async Task GameStart()
+
+        private async Task GameStart()
         {
-            while (Player.Hp > 0)
+            Player.PlayerVisable(1);
+            ammoText.Opacity = 0.5;
+            while (Player.Hp >= 0)
             {
                 Player.PlayerMove();
 
@@ -43,16 +48,32 @@ namespace MiniRambo
                 Enemy_Spawning_Rate++;
                 await Task.Delay(10);
             }
+            ResetEnemyList();
+            ammoText.Opacity = 0;
         }
-        private async void WindowLoaded(object sender, RoutedEventArgs e)
+        private void ResetEnemyList()
         {
-            await GameStart();
+            foreach (Enemy enemy in All_Enemies)
+            {
+                Main_Canvas.Children.Remove(enemy.Enemy_Ellipse);
+            }
+        }
+        private ImageBrush LoadBacground(string file)
+        {
+            ImageBrush imageBrush = new ImageBrush();
+            imageBrush.ImageSource = new BitmapImage(new Uri($"../../../Img/{file}", UriKind.Relative));
+            return imageBrush;
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            mainMenu.Background = LoadBacground("rambo.jpeg");
+            gameCanvas.Background = LoadBacground("Map.png");
         }
 
         private void WindowKeyDown(object sender, KeyEventArgs e)
         {
             Player.PlayerInput(e);
-
         }
 
         private void WindowKeyUp(object sender, KeyEventArgs e)
@@ -69,6 +90,22 @@ namespace MiniRambo
         private void WinMouseClick(object sender, MouseEventArgs e)
         {
             Player.Player_Gun.Shoot(Player.X, Player.Y);
+        }
+
+        private async void StartGameClick(object sender, RoutedEventArgs e)
+        {
+            mainMenu.Visibility = Visibility.Hidden;
+            await GameStart();
+        }
+
+        private void LeaveGame(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void SettingClick(object sender, RoutedEventArgs e)
+        {
+
         }
 
     }

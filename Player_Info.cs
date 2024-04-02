@@ -50,6 +50,8 @@ namespace MiniRambo
             playerEllipse.Width = 25;
             playerEllipse.Height = 25;
             playerEllipse.Stroke = Brushes.Black;
+            playerEllipse.Opacity = 0;
+            Panel.SetZIndex(playerEllipse, 1);
 
             ImageBrush imageBrush = new ImageBrush();
             imageBrush.ImageSource = new BitmapImage(new Uri("../../../Img/Rambo.png", UriKind.Relative));
@@ -95,6 +97,8 @@ namespace MiniRambo
 
         public void MoveAngle(double x, double y)
         {
+            if (Hp < 0)
+                return;
             MouseX = x;
             MouseY = y;
             double angle = Math.Atan2(y - Canvas.GetTop(Player_Ellipse), x - Canvas.GetLeft(Player_Ellipse)) * (180 / Math.PI);
@@ -136,18 +140,28 @@ namespace MiniRambo
         {
             if (Player_Hit_Cooldow)
             {
-                Player_Hit_Cooldow = false;
                 Hp -= dmg;
-                for (int i = 0; i < 3; i++)
+                if (Hp < 0)
+                    PlayerVisable(0.5);
+                else
                 {
-                    Player_Ellipse.Opacity = 0.3;
-                    await Task.Delay(500); 
+                    Player_Hit_Cooldow = false;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Player_Ellipse.Opacity = 0.3;
+                        await Task.Delay(500); 
 
-                    Player_Ellipse.Opacity = 1.0;
-                    await Task.Delay(500);
+                        Player_Ellipse.Opacity = 1.0;
+                        await Task.Delay(500);
+                    }
+                    Player_Hit_Cooldow = true;
                 }
-                Player_Hit_Cooldow = true;
             }
+        }
+
+        public void PlayerVisable(double visable)
+        {
+            Player_Ellipse.Opacity = visable;
         }
     }
 }

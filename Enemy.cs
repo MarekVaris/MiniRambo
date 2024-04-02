@@ -18,11 +18,11 @@ namespace MiniRambo
         public double X { get; set; }
         public double Y { get; set; }
         public Rect Enemy_Hitbox { get; set; }
+        public Ellipse Enemy_Ellipse { get; set; }
         public bool Allive { get; set; } = true;
         private int Hp { get; set; } = 2;
         private double Speed = 0;
         private Canvas Main_Canvas { get; set; }
-        private Ellipse Enemy_Ellipse { get; set; }
         private Player_Info Player { get; set; }
 
         public Enemy()
@@ -45,7 +45,7 @@ namespace MiniRambo
             enemyEllipse.Width = 40;
             enemyEllipse.Height = 40;
             enemyEllipse.Stroke = Brushes.Black;
-
+            
             ImageBrush imageBrush = new ImageBrush();
             imageBrush.ImageSource = new BitmapImage(new Uri("../../../Img/Enemy.png", UriKind.Relative));
             enemyEllipse.Fill = imageBrush;
@@ -58,7 +58,7 @@ namespace MiniRambo
 
 
             Random random = new Random();
-            Speed = random.Next(40, 70) / 100.0;
+            Speed = random.Next(70, 100) / 100.0;
 
             int widthMax = (int)Main_Canvas.Width - 20;
             int heightMax = (int)Main_Canvas.Height - 20;
@@ -118,7 +118,7 @@ namespace MiniRambo
                 await Task.Delay(10);
             }
             Allive = false;
-            Enemy_Ellipse.Opacity = 0.2;        
+            Enemy_Ellipse.Opacity = 0.4;        
         }
     }
 
