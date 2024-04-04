@@ -15,7 +15,9 @@ namespace MiniRambo
     {
         public int Enemy_Spawning_Rate = 0;
 
-        public Canvas Main_Canvas { get; set; }
+        public Canvas Game_Canvas { get; set; }
+        public Canvas Menu_Canvas { get; set; }
+        public Canvas Stop_Canvas {  get; set; }
         public List<Enemy> All_Enemies { get; set; }
         public Player_Info Player {  get; set; }
         public static MainWindow? Instance { get; private set; }
@@ -25,8 +27,11 @@ namespace MiniRambo
             InitializeComponent();
             Instance = this;
 
-            Main_Canvas = gameCanvas;
-            Player = new Player_Info();
+            Game_Canvas = gameCanvas;
+            Menu_Canvas = mainMenu;
+            Stop_Canvas = stopCanvas;
+
+            Player = new Player_Info(5,2);
             All_Enemies = new List<Enemy>();
         }
 
@@ -34,28 +39,30 @@ namespace MiniRambo
         private async Task GameStart()
         {
             Player.PlayerVisable(1);
-            ammoText.Opacity = 0.5;
-            while (Player.Hp >= 0)
+            Game_Canvas.Visibility = Visibility.Visible;
+            while (Player.Hp > 0)
             {
-                Player.PlayerMove();
-
-                if (Enemy_Spawning_Rate > 100)
+                if (Stop_Canvas.Visibility != Visibility.Visible)
                 {
-                    All_Enemies.Add(new Enemy());
-                    Enemy_Spawning_Rate = 0;
-                }
+                    Player.PlayerMove();
 
-                Enemy_Spawning_Rate++;
+                    if (Enemy_Spawning_Rate > 100)
+                    {
+                        All_Enemies.Add(new Enemy());
+                        Enemy_Spawning_Rate = 0;
+                    }
+
+                    Enemy_Spawning_Rate++;
+                }
                 await Task.Delay(10);
             }
             ResetEnemyList();
-            ammoText.Opacity = 0;
         }
         private void ResetEnemyList()
         {
             foreach (Enemy enemy in All_Enemies)
             {
-                Main_Canvas.Children.Remove(enemy.Enemy_Ellipse);
+                Game_Canvas.Children.Remove(enemy.Enemy_Ellipse);
             }
         }
         private ImageBrush LoadBacground(string file)
@@ -63,6 +70,13 @@ namespace MiniRambo
             ImageBrush imageBrush = new ImageBrush();
             imageBrush.ImageSource = new BitmapImage(new Uri($"../../../Img/{file}", UriKind.Relative));
             return imageBrush;
+        }
+        public void StopGame()
+        {
+            if (Stop_Canvas.Visibility == Visibility.Visible)
+                Stop_Canvas.Visibility = Visibility.Hidden;
+            else
+                Stop_Canvas.Visibility = Visibility.Visible;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -73,7 +87,10 @@ namespace MiniRambo
 
         private void WindowKeyDown(object sender, KeyEventArgs e)
         {
-            Player.PlayerInput(e);
+            if (e.Key == Key.Escape) 
+                StopGame();
+            else 
+                Player.PlayerInput(e);
         }
 
         private void WindowKeyUp(object sender, KeyEventArgs e)
@@ -83,18 +100,22 @@ namespace MiniRambo
 
         private void WinMouseMove(object sender, MouseEventArgs e)
         {
-            Point cursorPosition = e.GetPosition(gameCanvas);
-            Player.MoveAngle(cursorPosition.X - 15, cursorPosition.Y - 10);
+            if (Player.Hp > 0)
+            {
+                Point cursorPosition = e.GetPosition(gameCanvas);
+                Player.MoveAngle(cursorPosition.X - 15, cursorPosition.Y - 10);
+            }
         }
 
         private void WinMouseClick(object sender, MouseEventArgs e)
         {
-            Player.Player_Gun.Shoot(Player.X, Player.Y);
+            if (Player.Hp > 0 && Stop_Canvas.Visibility != Visibility.Visible)
+                Player.Player_Gun.Shoot(Player.X, Player.Y);
         }
 
         private async void StartGameClick(object sender, RoutedEventArgs e)
         {
-            mainMenu.Visibility = Visibility.Hidden;
+            Menu_Canvas.Visibility = Visibility.Hidden;
             await GameStart();
         }
 
@@ -104,6 +125,11 @@ namespace MiniRambo
         }
 
         private void SettingClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RestartGame(object sender, RoutedEventArgs e)
         {
 
         }

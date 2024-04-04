@@ -14,34 +14,44 @@ namespace MiniRambo
 {
     public class Player_Info
     {
-        public int Hp = 5;
-        public double Speed { get; set; } = 2;
-
-        public Gun Player_Gun { get; set; }
-        public Canvas Main_Canvas { get; set; }
-        public Rect Player_Hitbox { get; set; }
-
+        public int Hp { get; set; }
+        public double Speed { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
         public double Angle { get; set; }
+        public Gun Player_Gun { get; set; }
+        public Rect Player_Hitbox { get; set; }
 
-        private double MouseX, MouseY;
-        private List<double> Current_Move = new List<double> { 0, 0 };
+        private int Max_Hp { get; set; }
         private Ellipse Player_Ellipse { get; set; }
+        private List<double> Current_Move { get; set; } = new List<double> { 0, 0 };
+        private Canvas Game_Canvas { get; set; }
+        private Canvas Stop_Canvas { get; set; }
+        private TextBlock Health_Text { get; set; }
         private bool Player_Hit_Cooldow = true;
+        private double MouseX, MouseY;
 
-        public Player_Info()
+        public Player_Info(int hp, double speed)
         {
+            Max_Hp = hp;
+            Hp = Max_Hp;
+            Speed = speed;
             if (MainWindow.Instance != null)
             {
-                Main_Canvas = MainWindow.Instance.Main_Canvas;
-                X = Main_Canvas.Width / 2;
-                Y = Main_Canvas.Height / 2;
+                Health_Text = MainWindow.Instance.healthText;
+                Health_Text.Text = $"{Max_Hp}/{Hp}";
+                
+                Game_Canvas = MainWindow.Instance.Game_Canvas;
+                Stop_Canvas = MainWindow.Instance.Stop_Canvas;
+
+                X = Game_Canvas.Width / 2;
+                Y = Game_Canvas.Height / 2;
             }
             else
                 throw new InvalidOperationException();
-            Player_Gun = new Gun(12, 2000, true);
             Player_Ellipse = CreatePlayer();
+
+            Player_Gun = new Gun(12, 2000, true);
         }
 
         public Ellipse CreatePlayer()
@@ -59,7 +69,7 @@ namespace MiniRambo
 
             Canvas.SetLeft(playerEllipse, X);
             Canvas.SetTop(playerEllipse, Y);
-            Main_Canvas.Children.Add(playerEllipse);
+            Game_Canvas.Children.Add(playerEllipse);
 
             RotateTransform rotateTransform = new RotateTransform();
             rotateTransform.Angle = 0;
@@ -76,9 +86,9 @@ namespace MiniRambo
             double currentTop = Canvas.GetTop(Player_Ellipse);
 
             if (currentLeft < 0) currentLeft = 1 * Speed;
-            else if (currentLeft > Main_Canvas.Width - Player_Ellipse.Width) currentLeft += -1 * Speed;
+            else if (currentLeft > Game_Canvas.Width - Player_Ellipse.Width) currentLeft += -1 * Speed;
             else if (currentTop < 0) currentTop += 1 * Speed;
-            else if (currentTop > Main_Canvas.Height - Player_Ellipse.Height) currentTop += -1 * Speed;
+            else if (currentTop > Game_Canvas.Height - Player_Ellipse.Height) currentTop += -1 * Speed;
             else
             {
                 currentTop += Speed * Current_Move[0];
@@ -97,8 +107,7 @@ namespace MiniRambo
 
         public void MoveAngle(double x, double y)
         {
-            if (Hp < 0)
-                return;
+            
             MouseX = x;
             MouseY = y;
             double angle = Math.Atan2(y - Canvas.GetTop(Player_Ellipse), x - Canvas.GetLeft(Player_Ellipse)) * (180 / Math.PI);
@@ -131,7 +140,12 @@ namespace MiniRambo
                     Current_Move[0] = idle ? 0 : 1;
                     break;
                 case Key.R:
-                    Player_Gun.Reload();
+                    if (idle && Stop_Canvas.Visibility != Visibility.Visible)
+                        Player_Gun.Reload();
+                    break;
+                case Key.Space:
+                    if (idle && Stop_Canvas.Visibility != Visibility.Visible) 
+                        Player_Gun.Shoot(X,Y);
                     break;
             }
         }
@@ -140,12 +154,16 @@ namespace MiniRambo
         {
             if (Player_Hit_Cooldow)
             {
+                Player_Hit_Cooldow = false;
                 Hp -= dmg;
-                if (Hp < 0)
+                Health_Text.Text = $"{Max_Hp}/{Hp}";
+                if (Hp <= 0)
+                {
+                    Stop_Canvas.Visibility = Visibility.Visible;
                     PlayerVisable(0.5);
+                }
                 else
                 {
-                    Player_Hit_Cooldow = false;
                     for (int i = 0; i < 3; i++)
                     {
                         Player_Ellipse.Opacity = 0.3;

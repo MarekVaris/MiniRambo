@@ -9,7 +9,7 @@
     Loaded="WindowLoaded"
     Title="MiniRambo" 
     Width="1280"
-    Height="1024"
+    Height="800"
     Background="DarkSlateGray"
     KeyDown="WindowKeyDown"
     KeyUp="WindowKeyUp"
@@ -17,20 +17,18 @@
     MouseMove="WinMouseMove">
 
     <Viewbox Stretch="Fill">
-        <Canvas 
-            x:Name="gameCanvas"
+        <Canvas
             Width="1280"
-            Height="1024">
+            Height="800">
             <Canvas
                 x:Name="mainMenu"
                 Width="1280"
-                Height="1024"
+                Height="800"
                 Opacity="1">
                 <StackPanel
-                    Width="400"
-                    Height="600"
-                    Canvas.Left="440" 
-                    Canvas.Top="252">
+                    Canvas.Left="550" 
+                    Canvas.Top="200"
+                    Visibility="Visible">
                     <Button 
                         Background="DarkGray"
                         Opacity="0.5"
@@ -57,17 +55,60 @@
                     </Button>
                 </StackPanel>
             </Canvas>
-            <TextBlock
-                x:Name="ammoText"    
-                Background="DarkGray"
-                Opacity="0"
-                Width="100"
-                Height="55"
-                Canvas.Top="970"
-                Text=""
-                FontSize="40"
-                Panel.ZIndex="2">
-            </TextBlock>
+            <Canvas
+                x:Name="gameCanvas"
+                Width="1280"
+                Height="800" 
+                Visibility="Hidden">
+                <TextBlock
+                    x:Name="healthText"   
+                    Canvas.Top="0"
+                    Background="SeaShell"
+                    Opacity="0.5"
+                    Width="70"
+                    Height="55"
+                    Text=""
+                    FontSize="40"
+                    Panel.ZIndex="2">
+                </TextBlock>
+                <TextBlock
+                    x:Name="ammoText"   
+                    Canvas.Top="745"
+                    Background="DarkGray"
+                    Opacity="0.5"
+                    Width="100"
+                    Height="55"
+                    Text=""
+                    FontSize="40"
+                    Panel.ZIndex="2">
+                </TextBlock>
+                <Canvas
+                    x:Name="stopCanvas"
+                    Visibility="Hidden"
+                    Width="1280"
+                    Height="800">
+                    <StackPanel
+                        Canvas.Left="550" 
+                        Canvas.Top="300">
+                        <Button 
+                            Background="DarkGray"
+                            Opacity="0.5"
+                            Click="RestartGame"
+                            MinHeight="100"
+                            Margin="0,0,0,100" 
+                            Content="Restart Game" FontSize="36">
+                        </Button>
+                        <Button 
+                            Background="DarkGray"
+                            Opacity="0.5"
+                            Click="LeaveGame"
+                            MinHeight="100"
+                            Margin="0,0,0,0" 
+                            Content="Exit Game" FontSize="36">
+                        </Button>
+                    </StackPanel>
+                </Canvas>
+            </Canvas>
         </Canvas>
     </Viewbox>
 </Window>

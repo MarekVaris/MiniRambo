@@ -17,12 +17,14 @@ namespace MiniRambo
     {
         public double X { get; set; }
         public double Y { get; set; }
-        public Rect Enemy_Hitbox { get; set; }
-        public Ellipse Enemy_Ellipse { get; set; }
         public bool Allive { get; set; } = true;
+        public Ellipse Enemy_Ellipse { get; set; }
+        public Rect Enemy_Hitbox { get; set; }
+
         private int Hp { get; set; } = 2;
-        private double Speed = 0;
-        private Canvas Main_Canvas { get; set; }
+        private double Speed { get; set; } = 0;
+        private Canvas Game_Canvas { get; set; }
+        private Canvas Stop_Canvas { get; set; }
         private Player_Info Player { get; set; }
 
         public Enemy()
@@ -30,7 +32,8 @@ namespace MiniRambo
             if (MainWindow.Instance != null && MainWindow.Instance.Player != null)
             {
                 Player = MainWindow.Instance.Player;
-                Main_Canvas = Player.Main_Canvas;
+                Game_Canvas = MainWindow.Instance.Game_Canvas;
+                Stop_Canvas = MainWindow.Instance.Stop_Canvas;
             }
             else
                 throw new InvalidOperationException();
@@ -60,8 +63,8 @@ namespace MiniRambo
             Random random = new Random();
             Speed = random.Next(70, 100) / 100.0;
 
-            int widthMax = (int)Main_Canvas.Width - 20;
-            int heightMax = (int)Main_Canvas.Height - 20;
+            int widthMax = (int)Game_Canvas.Width - 20;
+            int heightMax = (int)Game_Canvas.Height - 20;
             if (random.Next(0,2) == 1)
             {
                 if (random.Next(0, 2) == 1)
@@ -80,7 +83,7 @@ namespace MiniRambo
             }
           
 
-            Main_Canvas.Children.Add(enemyEllipse);
+            Game_Canvas.Children.Add(enemyEllipse);
 
             return enemyEllipse;
         }
@@ -103,18 +106,20 @@ namespace MiniRambo
         {
             while (Hp > 0)
             {
-                
-                double angle = Math.Atan2(Player.Y - Canvas.GetTop(Enemy_Ellipse), Player.X - Canvas.GetLeft(Enemy_Ellipse)) * (180 / Math.PI);
-                double deltaX = Math.Cos(angle * Math.PI / 180) * Speed;
-                double deltaY = Math.Sin(angle * Math.PI / 180) * Speed;
-                RotateTransform? rotateTransform = Enemy_Ellipse.RenderTransform as RotateTransform;
-                if (rotateTransform != null) rotateTransform.Angle = angle;
+                if (Stop_Canvas.Visibility != Visibility.Visible)
+                {
 
-                Canvas.SetLeft(Enemy_Ellipse, Canvas.GetLeft(Enemy_Ellipse) + deltaX);
-                Canvas.SetTop(Enemy_Ellipse, Canvas.GetTop(Enemy_Ellipse) + deltaY);
+                    double angle = Math.Atan2(Player.Y - Canvas.GetTop(Enemy_Ellipse), Player.X - Canvas.GetLeft(Enemy_Ellipse)) * (180 / Math.PI);
+                    double deltaX = Math.Cos(angle * Math.PI / 180) * Speed;
+                    double deltaY = Math.Sin(angle * Math.PI / 180) * Speed;
+                    RotateTransform? rotateTransform = Enemy_Ellipse.RenderTransform as RotateTransform;
+                    if (rotateTransform != null) rotateTransform.Angle = angle;
 
-                EnemyTouchPlayer();
+                    Canvas.SetLeft(Enemy_Ellipse, Canvas.GetLeft(Enemy_Ellipse) + deltaX);
+                    Canvas.SetTop(Enemy_Ellipse, Canvas.GetTop(Enemy_Ellipse) + deltaY);
 
+                    EnemyTouchPlayer();
+                }
                 await Task.Delay(10);
             }
             Allive = false;
