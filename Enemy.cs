@@ -42,6 +42,11 @@ namespace MiniRambo
             _ = EnemyMove();
         }
 
+        public void EnemyHit(int dmg)
+        {
+            Hp -= dmg;
+        }
+
         private Ellipse CreateEnemy()
         {
             Ellipse enemyEllipse = new Ellipse();
@@ -86,11 +91,6 @@ namespace MiniRambo
             Game_Canvas.Children.Add(enemyEllipse);
 
             return enemyEllipse;
-        }
-
-        public void EnemyHit(int dmg)
-        {
-            Hp -= dmg;
         }
 
         private void EnemyTouchPlayer()

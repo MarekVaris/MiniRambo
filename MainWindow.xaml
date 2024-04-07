@@ -60,17 +60,12 @@
                 Width="1280"
                 Height="800" 
                 Visibility="Hidden">
-                <TextBlock
-                    x:Name="healthText"   
-                    Canvas.Top="0"
-                    Background="SeaShell"
-                    Opacity="0.5"
-                    Width="70"
-                    Height="55"
-                    Text=""
-                    FontSize="40"
+                <StackPanel 
+                    x:Name="healthUi"
+                    Orientation="Horizontal"
+                    Margin="10"
                     Panel.ZIndex="2">
-                </TextBlock>
+                </StackPanel>
                 <TextBlock
                     x:Name="ammoText"   
                     Canvas.Top="745"
@@ -86,7 +81,8 @@
                     x:Name="stopCanvas"
                     Visibility="Hidden"
                     Width="1280"
-                    Height="800">
+                    Height="800"
+                    Panel.ZIndex="2">
                     <StackPanel
                         Canvas.Left="550" 
                         Canvas.Top="300">

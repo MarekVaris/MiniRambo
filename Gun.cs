@@ -28,8 +28,7 @@ namespace MiniRambo
             Reload_Speed = reloadSpeed;
             if (ui)
                 if (MainWindow.Instance != null &&
-                    MainWindow.Instance.ammoText != null &&
-                    MainWindow.Instance.healthText != null)
+                    MainWindow.Instance.ammoText != null)
                 {
                     Ammo_Text = MainWindow.Instance.ammoText;
                     Ammo_Text.Text = $"{Max_Ammo}/{Current_Ammo}";

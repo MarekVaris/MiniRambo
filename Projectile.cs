@@ -93,7 +93,7 @@ namespace MiniRambo
         {
             while(true)
             {   
-                if (Stop_Canvas.Visibility != Visibility.Visible)
+                if (Stop_Canvas.Visibility != Visibility.Visible || Player.Hp <= 0)
                 {
                     double angle = Angle;
 

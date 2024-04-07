@@ -31,14 +31,14 @@ namespace MiniRambo
             Menu_Canvas = mainMenu;
             Stop_Canvas = stopCanvas;
 
-            Player = new Player_Info(5,2);
+            Player = new Player_Info(5, 2);
             All_Enemies = new List<Enemy>();
         }
 
 
         private async Task GameStart()
         {
-            Player.PlayerVisable(1);
+            Player.Player_Ellipse.Opacity = 1;
             Game_Canvas.Visibility = Visibility.Visible;
             while (Player.Hp > 0)
             {
@@ -56,21 +56,15 @@ namespace MiniRambo
                 }
                 await Task.Delay(10);
             }
-            ResetEnemyList();
         }
-        private void ResetEnemyList()
-        {
-            foreach (Enemy enemy in All_Enemies)
-            {
-                Game_Canvas.Children.Remove(enemy.Enemy_Ellipse);
-            }
-        }
-        private ImageBrush LoadBacground(string file)
+
+        public ImageBrush LoadImg(string file)
         {
             ImageBrush imageBrush = new ImageBrush();
             imageBrush.ImageSource = new BitmapImage(new Uri($"../../../Img/{file}", UriKind.Relative));
             return imageBrush;
         }
+
         public void StopGame()
         {
             if (Stop_Canvas.Visibility == Visibility.Visible)
@@ -79,10 +73,11 @@ namespace MiniRambo
                 Stop_Canvas.Visibility = Visibility.Visible;
         }
 
+
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            mainMenu.Background = LoadBacground("rambo.jpeg");
-            gameCanvas.Background = LoadBacground("Map.png");
+            mainMenu.Background = LoadImg("rambo.jpeg");
+            gameCanvas.Background = LoadImg("Map.png");
         }
 
         private void WindowKeyDown(object sender, KeyEventArgs e)
@@ -129,9 +124,18 @@ namespace MiniRambo
 
         }
 
-        private void RestartGame(object sender, RoutedEventArgs e)
+        private async void RestartGame(object sender, RoutedEventArgs e)
         {
+            Game_Canvas.Children.Remove(Player.Player_Ellipse);
+            foreach (Enemy enemy in All_Enemies)
+            {
+                Game_Canvas.Children.Remove(enemy.Enemy_Ellipse);
+            }
 
+            Player = new Player_Info(5, 2);
+            All_Enemies = new List<Enemy>();
+            Stop_Canvas.Visibility = Visibility.Hidden;
+            await GameStart();
         }
 
     }
