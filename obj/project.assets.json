@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\GitHub\\MiniRambo\\MiniRambo.csproj",
+      "projectUniqueName": "C:\\GitHub\\MiniRambo\\MiniRambo.csproj",
       "projectName": "MiniRambo",
-      "projectPath": "D:\\GitHub\\MiniRambo\\MiniRambo.csproj",
+      "projectPath": "C:\\GitHub\\MiniRambo\\MiniRambo.csproj",
       "packagesPath": "C:\\Users\\marek\\.nuget\\packages\\",
-      "outputPath": "D:\\GitHub\\MiniRambo\\obj\\",
+      "outputPath": "C:\\GitHub\\MiniRambo\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\marek\\AppData\\Roaming\\NuGet\\NuGet.Config",

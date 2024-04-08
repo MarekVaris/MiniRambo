@@ -37,7 +37,7 @@ namespace MiniRambo
             if (MainWindow.Instance != null)
             {
                 Health_Ui = MainWindow.Instance.healthUi;
-                AddHealthUi();
+                UpdateHealthUi();
 
                 Game_Canvas = MainWindow.Instance.Game_Canvas;
                 Stop_Canvas = MainWindow.Instance.Stop_Canvas;
@@ -122,7 +122,7 @@ namespace MiniRambo
 
         public async void PlayerHit(int dmg)
         {
-            if (Player_Hit_Cooldow)
+            if (Player_Hit_Cooldow && Hp > 0)
             {
                 Player_Hit_Cooldow = false;
                 Hp -= dmg;
@@ -132,7 +132,7 @@ namespace MiniRambo
                 }
                 if (Hp <= 0)
                 {
-                    Stop_Canvas.Visibility = Visibility.Visible;
+                    MainWindow.Instance?.StopGame();
                     Player_Ellipse.Opacity = 0.5;
                 }
                 else
@@ -150,14 +150,19 @@ namespace MiniRambo
             }
         }
 
-        private void AddHealthUi()
+        private void UpdateHealthUi()
         {
-            for (int i = 0; i < Hp; i++)
+            while (Health_Ui.Children.Count > 0)
+            {
+                Health_Ui.Children.RemoveAt(0);
+            }
+
+            for (int i = Health_Ui.Children.Count; i < Hp; i++)
             {
                 Rectangle rect = new Rectangle();
                 rect.Fill = MainWindow.Instance?.LoadImg("Heart.png");
-                rect.Height = 20;
-                rect.Width = 20;
+                rect.Height = 40;
+                rect.Width = 40;
                 rect.Margin = new Thickness(5);
                 Health_Ui.Children.Add(rect);
             }

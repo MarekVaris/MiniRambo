@@ -23,6 +23,7 @@ namespace MiniRambo
 
         private int Hp { get; set; } = 2;
         private double Speed { get; set; } = 0;
+        private int Current_Lvl { get; set; }
         private Canvas Game_Canvas { get; set; }
         private Canvas Stop_Canvas { get; set; }
         private Player_Info Player { get; set; }
@@ -31,6 +32,8 @@ namespace MiniRambo
         {
             if (MainWindow.Instance != null && MainWindow.Instance.Player != null)
             {
+                Current_Lvl = MainWindow.Instance.Lvl;
+
                 Player = MainWindow.Instance.Player;
                 Game_Canvas = MainWindow.Instance.Game_Canvas;
                 Stop_Canvas = MainWindow.Instance.Stop_Canvas;
@@ -122,9 +125,21 @@ namespace MiniRambo
                 }
                 await Task.Delay(10);
             }
+            AddPoints();
             Allive = false;
             Enemy_Ellipse.Opacity = 0.4;        
         }
+        private void AddPoints()
+        {
+            if (MainWindow.Instance != null)
+            {
+                MainWindow.Instance.Score += 100 * Current_Lvl;
+                MainWindow.Instance.Coins += 5 * Current_Lvl;
+
+                MainWindow.Instance.UpdatePoints();
+            }
+        }
+
     }
 
 }

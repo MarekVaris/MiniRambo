@@ -8,12 +8,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
+using System.Windows.Controls.Primitives;
 
 namespace MiniRambo
 {
     public partial class MainWindow : Window
     {
-        public int Enemy_Spawning_Rate = 0;
+        public int Lvl { get; set; } = 1;
+        public int Score { get; set; } = 0;
+        public int Coins { get; set; } = 0;
+        public List<int> Shop { get; set; } = [0,0,0];
+        public int Enemy_Spawning_Rate { get; set; } = 0;
 
         public Canvas Game_Canvas { get; set; }
         public Canvas Menu_Canvas { get; set; }
@@ -31,7 +36,7 @@ namespace MiniRambo
             Menu_Canvas = mainMenu;
             Stop_Canvas = stopCanvas;
 
-            Player = new Player_Info(5, 2);
+            Player = new Player_Info(3, 2);
             All_Enemies = new List<Enemy>();
         }
 
@@ -67,12 +72,20 @@ namespace MiniRambo
 
         public void StopGame()
         {
+            if (Player.Hp > 0)
+                textStopCanvas.Text = "Pause";
+            else
+                textStopCanvas.Text = "Game Over";
             if (Stop_Canvas.Visibility == Visibility.Visible)
                 Stop_Canvas.Visibility = Visibility.Hidden;
             else
                 Stop_Canvas.Visibility = Visibility.Visible;
         }
-
+        public void UpdatePoints()
+        {
+            Trace.WriteLine("eo");
+            scoreText.Text = Score.ToString();
+        }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
@@ -82,7 +95,7 @@ namespace MiniRambo
 
         private void WindowKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Escape) 
+            if (e.Key == Key.Escape && Player.Hp > 0) 
                 StopGame();
             else 
                 Player.PlayerInput(e);
@@ -104,8 +117,9 @@ namespace MiniRambo
 
         private void WinMouseClick(object sender, MouseEventArgs e)
         {
-            if (Player.Hp > 0 && Stop_Canvas.Visibility != Visibility.Visible)
-                Player.Player_Gun.Shoot(Player.X, Player.Y);
+            if (Player.Hp > 0 &&Stop_Canvas.Visibility != Visibility.Visible &&
+                Game_Canvas.Visibility == Visibility.Visible)
+                    Player.Player_Gun.Shoot(Player.X, Player.Y);
         }
 
         private async void StartGameClick(object sender, RoutedEventArgs e)
@@ -126,17 +140,24 @@ namespace MiniRambo
 
         private async void RestartGame(object sender, RoutedEventArgs e)
         {
+            Stop_Canvas.Visibility = Visibility.Hidden;
+            Player.Hp = 0;
+            await Task.Delay(100);
             Game_Canvas.Children.Remove(Player.Player_Ellipse);
             foreach (Enemy enemy in All_Enemies)
             {
+                enemy.Allive = false;
                 Game_Canvas.Children.Remove(enemy.Enemy_Ellipse);
             }
+            Coins = 0;
+            Score = 0;
+            Lvl = 1;
 
-            Player = new Player_Info(5, 2);
+            Player = new Player_Info(3, 2);
             All_Enemies = new List<Enemy>();
-            Stop_Canvas.Visibility = Visibility.Hidden;
             await GameStart();
         }
+
 
     }
 }

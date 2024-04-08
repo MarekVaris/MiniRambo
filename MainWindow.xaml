@@ -15,11 +15,11 @@
     KeyUp="WindowKeyUp"
     MouseLeftButtonDown="WinMouseClick"
     MouseMove="WinMouseMove">
-
     <Viewbox Stretch="Fill">
         <Canvas
             Width="1280"
             Height="800">
+            <!--MainMenuCanvas-->
             <Canvas
                 x:Name="mainMenu"
                 Width="1280"
@@ -55,6 +55,7 @@
                     </Button>
                 </StackPanel>
             </Canvas>
+            <!--GameCanvas-->
             <Canvas
                 x:Name="gameCanvas"
                 Width="1280"
@@ -68,24 +69,42 @@
                 </StackPanel>
                 <TextBlock
                     x:Name="ammoText"   
-                    Canvas.Top="745"
+                    Canvas.Bottom="0"
                     Background="DarkGray"
                     Opacity="0.5"
-                    Width="100"
-                    Height="55"
+                    Width="105"
+                    Height="45"
                     Text=""
                     FontSize="40"
+                    Panel.ZIndex="2">
+                </TextBlock>
+                <TextBlock
+                    x:Name="scoreText"   
+                    Background="DarkGray"
+                    Canvas.Right="0"
+                    Height="40"
+                    MinWidth="100"
+                    Opacity="0.5"
+                    Text="0"
+                    TextAlignment="Right"
+                    FontSize="30"
                     Panel.ZIndex="2">
                 </TextBlock>
                 <Canvas
                     x:Name="stopCanvas"
                     Visibility="Hidden"
-                    Width="1280"
-                    Height="800"
                     Panel.ZIndex="2">
                     <StackPanel
                         Canvas.Left="550" 
-                        Canvas.Top="300">
+                        Canvas.Top="200">
+                        <TextBlock
+                            x:Name="textStopCanvas"
+                            Background="Transparent"
+                            Text="Pause"
+                            MinWidth="220"
+                            MinHeight="100"
+                            FontSize="50"
+                            TextAlignment="Center"/>
                         <Button 
                             Background="DarkGray"
                             Opacity="0.5"
