@@ -45,6 +45,7 @@ namespace MiniRambo
         {
             Player.Player_Ellipse.Opacity = 1;
             Game_Canvas.Visibility = Visibility.Visible;
+
             while (Player.Hp > 0)
             {
                 if (Stop_Canvas.Visibility != Visibility.Visible)
@@ -83,8 +84,8 @@ namespace MiniRambo
         }
         public void UpdatePoints()
         {
-            Trace.WriteLine("eo");
             scoreText.Text = Score.ToString();
+            coinsText.Text = Coins.ToString();
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
@@ -152,10 +153,10 @@ namespace MiniRambo
             Coins = 0;
             Score = 0;
             Lvl = 1;
-
+            UpdatePoints();
             Player = new Player_Info(3, 2);
             All_Enemies = new List<Enemy>();
-            await GameStart();
+            _ = GameStart();
         }
 
 

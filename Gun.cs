@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace MiniRambo
 {
@@ -16,25 +18,27 @@ namespace MiniRambo
         public double Parent_Left;
         public bool Reloading = false;
 
-        private int Reload_Speed { get; set; }
-        private int Max_Ammo { get; set; }
-        private int Current_Ammo { get; set; }
-        private TextBlock? Ammo_Text { get; set; }
+        private int _Reload_Speed { get; set; }
+        private int _Max_Ammo { get; set; }
+        private int _Current_Ammo { get; set; }
+        private TextBlock? _Ammo_Text { get; set; }
 
         public Gun(int maxAmmo, int reloadSpeed, bool ui = false)
         {
-            Max_Ammo = maxAmmo;
-            Current_Ammo = Max_Ammo;
-            Reload_Speed = reloadSpeed;
+            _Max_Ammo = maxAmmo;
+            _Current_Ammo = _Max_Ammo;
+            _Reload_Speed = reloadSpeed;
             if (ui)
+            {
                 if (MainWindow.Instance != null &&
                     MainWindow.Instance.ammoText != null)
                 {
-                    Ammo_Text = MainWindow.Instance.ammoText;
-                    Ammo_Text.Text = $"{Max_Ammo}/{Current_Ammo}";
+                    _Ammo_Text = MainWindow.Instance.ammoText;
+                    _Ammo_Text.Text = $"{_Max_Ammo}/{_Current_Ammo}";
                 }
                 else
                     throw new InvalidOperationException();
+            }
         }
 
         public async void Reload()
@@ -42,24 +46,24 @@ namespace MiniRambo
             if (!Reloading) 
             { 
                 Reloading = true;
-                Current_Ammo = 0;
-                await Task.Delay(Reload_Speed);
-                Current_Ammo = Max_Ammo;
-                if (Ammo_Text != null)
-                    Ammo_Text.Text = $"{Max_Ammo}/{Current_Ammo}";
+                _Current_Ammo = 0;
+                await Task.Delay(_Reload_Speed);
+                _Current_Ammo = _Max_Ammo;
+                if (_Ammo_Text != null)
+                    _Ammo_Text.Text = $"{_Max_Ammo}/{_Current_Ammo}";
                 Reloading = false;
             }
         }
 
         public void Shoot(double top, double left)
         {
-            if (Current_Ammo > 0)
+            if (_Current_Ammo > 0)
             {
                 Parent_Top = top;
                 Parent_Left = left;
-                Current_Ammo--;
-                if (Ammo_Text != null)
-                    Ammo_Text.Text = $"{Max_Ammo}/{Current_Ammo}";
+                _Current_Ammo--;
+                if (_Ammo_Text != null)
+                    _Ammo_Text.Text = $"{_Max_Ammo}/{_Current_Ammo}";
                 _ = new Projectile(this, false);
             }
             else

@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "C:\\GitHub\\MiniRambo\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|c:\\github\\minirambo\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|c:\\github\\minirambo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|c:\\github\\minirambo\\player_info.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|solutionrelative:player_info.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|c:\\github\\minirambo\\projectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|solutionrelative:projectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|c:\\github\\minirambo\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,8 +15,16 @@
       "RelativeMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|solutionrelative:gun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|c:\\github\\minirambo\\projectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|solutionrelative:projectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|c:\\github\\minirambo\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|solutionrelative:mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|c:\\github\\minirambo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|solutionrelative:mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|c:\\github\\minirambo\\player_info.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1448F8B3-BC1C-4799-9CAE-C913B02E326C}|MiniRambo.csproj|solutionrelative:player_info.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +38,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\GitHub\\MiniRambo\\MainWindow.xaml",
               "RelativeDocumentMoniker": "MainWindow.xaml",
@@ -52,71 +52,71 @@
         },
         {
           "DockedWidth": 512,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Gun.cs",
-              "DocumentMoniker": "C:\\GitHub\\MiniRambo\\Gun.cs",
-              "RelativeDocumentMoniker": "Gun.cs",
-              "ToolTip": "C:\\GitHub\\MiniRambo\\Gun.cs",
-              "RelativeToolTip": "Gun.cs",
-              "ViewState": "AQIAAA4AAAAAAAAAAAAAwBEAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-01T20:22:03.573Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Player_Info.cs",
-              "DocumentMoniker": "C:\\GitHub\\MiniRambo\\Player_Info.cs",
-              "RelativeDocumentMoniker": "Player_Info.cs",
-              "ToolTip": "C:\\GitHub\\MiniRambo\\Player_Info.cs",
-              "RelativeToolTip": "Player_Info.cs",
-              "ViewState": "AQIAABQAAAAAAAAAAAAswLAAAAAmAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-07T19:26:58.054Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\GitHub\\MiniRambo\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "MainWindow.xaml.cs",
               "ToolTip": "C:\\GitHub\\MiniRambo\\MainWindow.xaml.cs",
               "RelativeToolTip": "MainWindow.xaml.cs",
-              "ViewState": "AQIAAAQAAAAAAAAAAAAYwAwAAAATAAAA",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAABYAAAAXAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-07T19:54:46.39Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "Enemy.cs",
               "DocumentMoniker": "C:\\GitHub\\MiniRambo\\Enemy.cs",
               "RelativeDocumentMoniker": "Enemy.cs",
               "ToolTip": "C:\\GitHub\\MiniRambo\\Enemy.cs",
               "RelativeToolTip": "Enemy.cs",
-              "ViewState": "AQIAAGwAAAAAAAAAAAAAAI0AAAAAAAAA",
+              "ViewState": "AQIAABcAAAAAAAAAAAA3wHIAAABZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-28T16:19:41.478Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
+              "Title": "Gun.cs",
+              "DocumentMoniker": "C:\\GitHub\\MiniRambo\\Gun.cs",
+              "RelativeDocumentMoniker": "Gun.cs",
+              "ToolTip": "C:\\GitHub\\MiniRambo\\Gun.cs",
+              "RelativeToolTip": "Gun.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAEEAAAA2AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-01T20:22:03.573Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
               "Title": "Projectile.cs",
               "DocumentMoniker": "C:\\GitHub\\MiniRambo\\Projectile.cs",
               "RelativeDocumentMoniker": "Projectile.cs",
               "ToolTip": "C:\\GitHub\\MiniRambo\\Projectile.cs",
               "RelativeToolTip": "Projectile.cs",
-              "ViewState": "AQIAAAsAAAAAAAAAAAAxwC0AAAAyAAAA",
+              "ViewState": "AQIAABcAAAAAAAAAAAAkwGkAAACUAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-27T17:05:46.796Z"
+              "WhenOpened": "2024-03-27T17:05:46.796Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Player_Info.cs",
+              "DocumentMoniker": "C:\\GitHub\\MiniRambo\\Player_Info.cs",
+              "RelativeDocumentMoniker": "Player_Info.cs",
+              "ToolTip": "C:\\GitHub\\MiniRambo\\Player_Info.cs",
+              "RelativeToolTip": "Player_Info.cs",
+              "ViewState": "AQIAAE4AAAAAAAAAAAAuwBEAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-07T19:26:58.054Z"
             }
           ]
         }

@@ -21,22 +21,22 @@ namespace MiniRambo
         public Ellipse Enemy_Ellipse { get; set; }
         public Rect Enemy_Hitbox { get; set; }
 
-        private int Hp { get; set; } = 2;
-        private double Speed { get; set; } = 0;
-        private int Current_Lvl { get; set; }
-        private Canvas Game_Canvas { get; set; }
-        private Canvas Stop_Canvas { get; set; }
-        private Player_Info Player { get; set; }
+        private int _Hp { get; set; } = 2;
+        private double _Speed { get; set; } = 0;
+        private int _Current_Lvl { get; set; }
+        private Canvas _Game_Canvas { get; set; }
+        private Canvas _Stop_Canvas { get; set; }
+        private Player_Info _Player { get; set; }
 
         public Enemy()
         {
             if (MainWindow.Instance != null && MainWindow.Instance.Player != null)
             {
-                Current_Lvl = MainWindow.Instance.Lvl;
+                _Current_Lvl = MainWindow.Instance.Lvl;
 
-                Player = MainWindow.Instance.Player;
-                Game_Canvas = MainWindow.Instance.Game_Canvas;
-                Stop_Canvas = MainWindow.Instance.Stop_Canvas;
+                _Player = MainWindow.Instance.Player;
+                _Game_Canvas = MainWindow.Instance.Game_Canvas;
+                _Stop_Canvas = MainWindow.Instance.Stop_Canvas;
             }
             else
                 throw new InvalidOperationException();
@@ -47,7 +47,7 @@ namespace MiniRambo
 
         public void EnemyHit(int dmg)
         {
-            Hp -= dmg;
+            _Hp -= dmg;
         }
 
         private Ellipse CreateEnemy()
@@ -69,10 +69,10 @@ namespace MiniRambo
 
 
             Random random = new Random();
-            Speed = random.Next(70, 100) / 100.0;
+            _Speed = random.Next(70, 100) / 100.0;
 
-            int widthMax = (int)Game_Canvas.Width - 20;
-            int heightMax = (int)Game_Canvas.Height - 20;
+            int widthMax = (int)_Game_Canvas.Width - 20;
+            int heightMax = (int)_Game_Canvas.Height - 20;
             if (random.Next(0,2) == 1)
             {
                 if (random.Next(0, 2) == 1)
@@ -91,7 +91,7 @@ namespace MiniRambo
             }
           
 
-            Game_Canvas.Children.Add(enemyEllipse);
+            _Game_Canvas.Children.Add(enemyEllipse);
 
             return enemyEllipse;
         }
@@ -99,22 +99,22 @@ namespace MiniRambo
         private void EnemyTouchPlayer()
         {
             Enemy_Hitbox = new Rect(Canvas.GetLeft(Enemy_Ellipse), Canvas.GetTop(Enemy_Ellipse), Enemy_Ellipse.Width, Enemy_Ellipse.Height);
-            if (Enemy_Hitbox.IntersectsWith(Player.Player_Hitbox))
+            if (Enemy_Hitbox.IntersectsWith(_Player.Player_Hitbox))
             {
-                Player.PlayerHit(1);
+                _Player.PlayerHit(1);
             }
         }
 
         private async Task EnemyMove()
         {
-            while (Hp > 0)
+            while (_Hp > 0)
             {
-                if (Stop_Canvas.Visibility != Visibility.Visible)
+                if (_Stop_Canvas.Visibility != Visibility.Visible)
                 {
 
-                    double angle = Math.Atan2(Player.Y - Canvas.GetTop(Enemy_Ellipse), Player.X - Canvas.GetLeft(Enemy_Ellipse)) * (180 / Math.PI);
-                    double deltaX = Math.Cos(angle * Math.PI / 180) * Speed;
-                    double deltaY = Math.Sin(angle * Math.PI / 180) * Speed;
+                    double angle = Math.Atan2(_Player.Y - Canvas.GetTop(Enemy_Ellipse), _Player.X - Canvas.GetLeft(Enemy_Ellipse)) * (180 / Math.PI);
+                    double deltaX = Math.Cos(angle * Math.PI / 180) * _Speed;
+                    double deltaY = Math.Sin(angle * Math.PI / 180) * _Speed;
                     RotateTransform? rotateTransform = Enemy_Ellipse.RenderTransform as RotateTransform;
                     if (rotateTransform != null) rotateTransform.Angle = angle;
 
@@ -133,13 +133,11 @@ namespace MiniRambo
         {
             if (MainWindow.Instance != null)
             {
-                MainWindow.Instance.Score += 100 * Current_Lvl;
-                MainWindow.Instance.Coins += 5 * Current_Lvl;
+                MainWindow.Instance.Score += 100 * _Current_Lvl;
+                MainWindow.Instance.Coins += 5 * _Current_Lvl;
 
                 MainWindow.Instance.UpdatePoints();
             }
         }
-
     }
-
 }
