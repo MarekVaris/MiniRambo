@@ -28,14 +28,15 @@
                 <StackPanel
                     Canvas.Left="550" 
                     Canvas.Top="200"
-                    Visibility="Visible">
+                    Visibility="Hidden">
                     <Button 
                         Background="DarkGray"
                         Opacity="0.5"
                         Click="StartGameClick"
                         MinHeight="100"
                         Margin="0,0,0,100" 
-                        Content="Start Game" FontSize="36">
+                        Content="Start Game" 
+                        FontSize="36">
                     </Button>
                     <Button 
                         Background="DarkGray"
@@ -43,7 +44,8 @@
                         Click="SettingClick"
                         MinHeight="100"
                         Margin="0,0,0,100" 
-                        Content="Setting" FontSize="36">
+                        Content="Setting" 
+                        FontSize="36">
                     </Button>
                     <Button 
                         Background="DarkGray"
@@ -51,7 +53,8 @@
                         Click="LeaveGame"
                         MinHeight="100"
                         Margin="0,0,0,0"
-                        Content="Leave Game" FontSize="36">
+                        Content="Leave Game" 
+                        FontSize="36">
                     </Button>
                 </StackPanel>
             </Canvas>
@@ -60,7 +63,7 @@
                 x:Name="gameCanvas"
                 Width="1280"
                 Height="800" 
-                Visibility="Hidden">
+                Visibility="Visible">
                 <StackPanel 
                     x:Name="healthUi"
                     Orientation="Horizontal"
@@ -134,6 +137,112 @@
                             MinHeight="100"
                             Margin="0,0,0,0" 
                             Content="Exit Game" FontSize="36">
+                        </Button>
+                    </StackPanel>
+                </Canvas>
+                <Canvas
+                    x:Name="shopCanvas"
+                    Visibility="Visible">
+                    <StackPanel
+                        Background="DarkCyan"
+                        Canvas.Top="100"
+                        Canvas.Left="150"
+                        Width="300"
+                        Height="400">
+                        <StackPanel
+                            MinHeight="100"
+                            Orientation="Horizontal"
+                            Margin="10,0,10,50">
+                            <TextBlock
+                                Width="150"
+                                Height="40"
+                                Text="HP:+0" 
+                                FontSize="30">
+                            </TextBlock>
+                            <TextBlock
+                                TextAlignment="Right"
+                                Width="60"
+                                Height="40"
+                                Text="10"
+                                Margin="0,0,10,0"
+                                FontSize="30">
+                            </TextBlock>
+                            <Button
+                                Width="60"
+                                Height="50"
+                                Content="Buy" 
+                                CommandParameter="Hp"
+                                Click="StatsBuy">
+                            </Button>
+                        </StackPanel>
+                        <StackPanel
+                            MinHeight="100"
+                            Orientation="Horizontal"
+                            Margin="10,0,10,50">
+                            <TextBlock
+                                Width="150"
+                                Height="40"
+                                Text="DMG:+0" 
+                                FontSize="28">
+                            </TextBlock>
+                            <TextBlock
+                                TextAlignment="Right"
+                                Width="60"
+                                Height="40"
+                                Text="10"
+                                Margin="0,0,10,0"
+                                FontSize="30">
+                            </TextBlock>
+                            <Button
+                                Width="60"
+                                Height="50"
+                                Content="Buy" 
+                                CommandParameter="Hp"
+                                Click="StatsBuy">
+                            </Button>
+                        </StackPanel>
+                        <StackPanel
+                            MinHeight="100"
+                            Orientation="Horizontal"
+                            Margin="10,0,10,50">
+                            <TextBlock
+                                Width="150"
+                                Height="40"
+                                Text="SPD:+0" 
+                                FontSize="30">
+                            </TextBlock>
+                            <TextBlock
+                                TextAlignment="Right"
+                                Width="60"
+                                Height="40"
+                                Text="10"
+                                Margin="0,0,10,0"
+                                FontSize="30">
+                            </TextBlock>
+                            <Button
+                                Width="60"
+                                Height="50"
+                                Content="Buy" 
+                                CommandParameter="Hp"
+                                Click="StatsBuy">
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel
+                        Canvas.Top="100"
+                        Canvas.Left="500"
+                        Width="350"
+                        Height="400"
+                        Background="PowderBlue">
+
+                    </StackPanel>
+                    <StackPanel
+                        Canvas.Top="100"
+                        Canvas.Left="900"
+                        Width="250"
+                        Height="550">
+                        <Button>
+
                         </Button>
                     </StackPanel>
                 </Canvas>

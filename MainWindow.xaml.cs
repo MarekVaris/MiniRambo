@@ -159,6 +159,9 @@ namespace MiniRambo
             _ = GameStart();
         }
 
+        private void StatsBuy(object sender, RoutedEventArgs e)
+        {
 
+        }
     }
 }
