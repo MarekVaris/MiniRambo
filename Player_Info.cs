@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows;
+using System.Numerics;
 
 namespace MiniRambo
 {
@@ -76,8 +77,8 @@ namespace MiniRambo
                         Player_Gun.Reload();
                     break;
                 case Key.Space:
-                    if (idle && Stop_Canvas.Visibility != Visibility.Visible) 
-                        Player_Gun.Shoot(X,Y);
+                    if (Hp > 0 && Stop_Canvas.Visibility != Visibility.Visible && Game_Canvas.Visibility == Visibility.Visible)
+                        Player_Gun.Shoot();
                     break;
             }
         }

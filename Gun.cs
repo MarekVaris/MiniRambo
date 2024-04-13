@@ -14,8 +14,6 @@ namespace MiniRambo
 {
     public class Gun
     {
-        public double Parent_Top;
-        public double Parent_Left;
         public bool Reloading = false;
 
         private int _Reload_Speed { get; set; }
@@ -23,7 +21,7 @@ namespace MiniRambo
         private int _Current_Ammo { get; set; }
         private TextBlock? _Ammo_Text { get; set; }
 
-        public Gun(int maxAmmo, int reloadSpeed, bool ui = false)
+        public Gun(int maxAmmo = 0, int reloadSpeed = 0, bool ui = false)
         {
             _Max_Ammo = maxAmmo;
             _Current_Ammo = _Max_Ammo;
@@ -55,16 +53,18 @@ namespace MiniRambo
             }
         }
 
-        public void Shoot(double top, double left)
+        public void Shoot(Enemy? enemy = null)
         {
-            if (_Current_Ammo > 0)
+            if (enemy != null)
             {
-                Parent_Top = top;
-                Parent_Left = left;
+                _ = new Projectile(enemy);
+            }
+            else if (_Current_Ammo > 0)
+            {
                 _Current_Ammo--;
                 if (_Ammo_Text != null)
                     _Ammo_Text.Text = $"{_Max_Ammo}/{_Current_Ammo}";
-                _ = new Projectile(this, false);
+                _ = new Projectile();
             }
             else
                 Reload();

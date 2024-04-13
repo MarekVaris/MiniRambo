@@ -8,9 +8,9 @@ namespace MiniRambo
 {
     public class Shop
     {
-        private int _Hp = 0;
-        private int _Dmg = 0;
-        private int _Speed = 0;
+        //private int _Hp = 0;
+        //private int _Dmg = 0;
+        //private int _Speed = 0;
 
 
         public Shop()

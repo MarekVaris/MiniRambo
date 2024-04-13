@@ -12,17 +12,19 @@ namespace MiniRambo
     public class Projectile
     {
         private double _Speed = 5;
-        private bool _Is_Enemy { get; set; }
+        private bool _Is_Enemy = false;
         private double _Angle { get; set; }
 
+        private double _Top {  get; set; }
+        private double _Left { get; set; }
         private List<Enemy> _All_Enemies { get; set; }
         private Player_Info _Player;
         private Canvas _Game_Canvas;
         private Canvas _Stop_Canvas;
         private Ellipse _Bullet;
-        private Gun _Gun_Using;
+        private SolidColorBrush _Bullet_Color;
 
-        public Projectile(Gun gunUsing, bool isEnemy)
+        public Projectile(Enemy? enemy = null)
         {
             if (MainWindow.Instance != null && MainWindow.Instance.Player != null)
             {
@@ -30,13 +32,26 @@ namespace MiniRambo
                 _Game_Canvas = MainWindow.Instance.Game_Canvas;
                 _Stop_Canvas = MainWindow.Instance.Stop_Canvas;
                 _Player = MainWindow.Instance.Player;
-                _Angle = _Player.Angle;
+                if(enemy == null)
+                {
+                    _Angle = _Player.Angle;
+                    _Top = Canvas.GetTop(_Player.Player_Ellipse);
+                    _Left = Canvas.GetLeft(_Player.Player_Ellipse);
+                    _Bullet_Color = Brushes.Black;
+                }
             }
             else
                 throw new InvalidOperationException();
-            _Gun_Using = gunUsing;
-            _Is_Enemy = isEnemy;
-            if (isEnemy) _Speed = 1;
+            if (enemy != null)
+            {
+                _Angle = enemy.Angle;
+                _Is_Enemy = true;
+                _Speed = 2;
+                _Top = Canvas.GetTop(enemy.Enemy_Ellipse);
+                _Left = Canvas.GetLeft(enemy.Enemy_Ellipse);
+                _Bullet_Color = Brushes.Red;
+            }
+
             _Bullet = CreateProjectile();
             _ = MoveBullet();
         }
@@ -47,10 +62,10 @@ namespace MiniRambo
             bulletEllipse.Width = 25;
             bulletEllipse.Height = 10;
             bulletEllipse.Stroke = Brushes.Black;
-            bulletEllipse.Fill = Brushes.Black;
+            bulletEllipse.Fill = _Bullet_Color;
 
-            Canvas.SetLeft(bulletEllipse, _Gun_Using.Parent_Top);
-            Canvas.SetTop(bulletEllipse, _Gun_Using.Parent_Left);
+            Canvas.SetLeft(bulletEllipse, _Left);
+            Canvas.SetTop(bulletEllipse, _Top);
 
             _Game_Canvas.Children.Add(bulletEllipse);
 
@@ -81,7 +96,6 @@ namespace MiniRambo
                     if (projectile.IntersectsWith(enemy.Enemy_Hitbox) && enemy.Allive)
                     {
                         enemy.EnemyHit(1);
-                        _Game_Canvas.Children.Remove(_Bullet);
                         return true;
                     }
                 }
@@ -113,6 +127,7 @@ namespace MiniRambo
                 }
                 await Task.Delay(10);
             }
+            _Game_Canvas.Children.Remove(_Bullet);
         }
 
     }

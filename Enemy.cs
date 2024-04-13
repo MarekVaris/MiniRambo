@@ -15,18 +15,19 @@ namespace MiniRambo
 {
     public class Enemy
     {
-        public double X { get; set; }
-        public double Y { get; set; }
         public bool Allive { get; set; } = true;
+        public double Angle { get; set; }
         public Ellipse Enemy_Ellipse { get; set; }
         public Rect Enemy_Hitbox { get; set; }
 
+        private bool _Has_Gun = false;
         private int _Hp { get; set; } = 2;
         private double _Speed { get; set; } = 0;
         private int _Current_Lvl { get; set; }
         private Canvas _Game_Canvas { get; set; }
         private Canvas _Stop_Canvas { get; set; }
         private Player_Info _Player { get; set; }
+        private Gun _Enemy_Gun { get; set; }
 
         public Enemy()
         {
@@ -42,12 +43,17 @@ namespace MiniRambo
                 throw new InvalidOperationException();
 
             Enemy_Ellipse = CreateEnemy();
+            _Enemy_Gun = new Gun();
             _ = EnemyMove();
         }
 
         public void EnemyHit(int dmg)
         {
             _Hp -= dmg;
+            if (_Hp <= 0)
+            {
+                Allive = false;
+            }
         }
 
         private Ellipse CreateEnemy()
@@ -56,10 +62,17 @@ namespace MiniRambo
             enemyEllipse.Width = 40;
             enemyEllipse.Height = 40;
             enemyEllipse.Stroke = Brushes.Black;
-            
-            ImageBrush imageBrush = new ImageBrush();
-            imageBrush.ImageSource = new BitmapImage(new Uri("../../../Img/Enemy.png", UriKind.Relative));
-            enemyEllipse.Fill = imageBrush;
+
+            Random random = new Random();
+            if (_Current_Lvl>1 && random.Next(0, 4) == 1)
+            {
+                enemyEllipse.Fill = MainWindow.Instance?.LoadImg("Enemy2.png");
+                _Has_Gun = true;
+            }
+            else
+            {
+                enemyEllipse.Fill = MainWindow.Instance?.LoadImg("Enemy.png");
+            }
 
             RotateTransform rotateTransform = new RotateTransform();
             rotateTransform.Angle = 0;
@@ -67,8 +80,6 @@ namespace MiniRambo
             rotateTransform.CenterY = enemyEllipse.Height / 2;
             enemyEllipse.RenderTransform = rotateTransform;
 
-
-            Random random = new Random();
             _Speed = random.Next(70, 100) / 100.0;
 
             int widthMax = (int)_Game_Canvas.Width - 20;
@@ -107,7 +118,9 @@ namespace MiniRambo
 
         private async Task EnemyMove()
         {
-            while (_Hp > 0)
+            int fireCoolDown = 0;
+
+            while (Allive)
             {
                 if (_Stop_Canvas.Visibility != Visibility.Visible)
                 {
@@ -116,12 +129,28 @@ namespace MiniRambo
                     double deltaX = Math.Cos(angle * Math.PI / 180) * _Speed;
                     double deltaY = Math.Sin(angle * Math.PI / 180) * _Speed;
                     RotateTransform? rotateTransform = Enemy_Ellipse.RenderTransform as RotateTransform;
-                    if (rotateTransform != null) rotateTransform.Angle = angle;
+                    if (rotateTransform != null)
+                    {
+                        rotateTransform.Angle = angle;
+                        Angle = angle;
+                    }
+
 
                     Canvas.SetLeft(Enemy_Ellipse, Canvas.GetLeft(Enemy_Ellipse) + deltaX);
                     Canvas.SetTop(Enemy_Ellipse, Canvas.GetTop(Enemy_Ellipse) + deltaY);
 
                     EnemyTouchPlayer();
+
+                    if (_Has_Gun)
+                    {
+                        if(fireCoolDown > 100)
+                        {
+                            _Enemy_Gun.Shoot(this);
+                            fireCoolDown = 0;
+                        }
+                        else
+                            fireCoolDown++;
+                    }
                 }
                 await Task.Delay(10);
             }
@@ -129,6 +158,7 @@ namespace MiniRambo
             Allive = false;
             Enemy_Ellipse.Opacity = 0.4;        
         }
+
         private void AddPoints()
         {
             if (MainWindow.Instance != null)

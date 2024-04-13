@@ -14,7 +14,7 @@ namespace MiniRambo
 {
     public partial class MainWindow : Window
     {
-        public int Lvl { get; set; } = 1;
+        public int Lvl { get; set; } = 2;
         public int Score { get; set; } = 0;
         public int Coins { get; set; } = 0;
         public List<int> Shop { get; set; } = [0,0,0];
@@ -118,9 +118,8 @@ namespace MiniRambo
 
         private void WinMouseClick(object sender, MouseEventArgs e)
         {
-            if (Player.Hp > 0 &&Stop_Canvas.Visibility != Visibility.Visible &&
-                Game_Canvas.Visibility == Visibility.Visible)
-                    Player.Player_Gun.Shoot(Player.X, Player.Y);
+            if (Player.Hp > 0 && Stop_Canvas.Visibility != Visibility.Visible && Game_Canvas.Visibility == Visibility.Visible)
+                    Player.Player_Gun.Shoot();
         }
 
         private async void StartGameClick(object sender, RoutedEventArgs e)
@@ -160,6 +159,11 @@ namespace MiniRambo
         }
 
         private void StatsBuy(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void GunStatsBuy(object sender, RoutedEventArgs e)
         {
 
         }

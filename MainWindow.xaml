@@ -28,7 +28,7 @@
                 <StackPanel
                     Canvas.Left="550" 
                     Canvas.Top="200"
-                    Visibility="Hidden">
+                    Visibility="Visible">
                     <Button 
                         Background="DarkGray"
                         Opacity="0.5"
@@ -59,53 +59,56 @@
                 </StackPanel>
             </Canvas>
             <!--GameCanvas-->
-            <Canvas
-                x:Name="gameCanvas"
-                Width="1280"
-                Height="800" 
-                Visibility="Visible">
-                <StackPanel 
-                    x:Name="healthUi"
-                    Orientation="Horizontal"
-                    Margin="10"
-                    Panel.ZIndex="2">
-                </StackPanel>
-                <TextBlock
-                    x:Name="ammoText"   
-                    Canvas.Bottom="0"
-                    Background="DarkGray"
-                    Opacity="0.5"
-                    Width="105"
-                    Height="45"
-                    Text=""
-                    FontSize="40"
-                    Panel.ZIndex="2">
-                </TextBlock>
-                <TextBlock
-                    x:Name="scoreText"   
-                    Background="DarkGray"
-                    Canvas.Right="0"
-                    Height="40"
-                    MinWidth="100"
-                    Opacity="0.5"
-                    Text="0"
-                    TextAlignment="Right"
-                    FontSize="30"
-                    Panel.ZIndex="2">
-                </TextBlock>
-                <TextBlock
-                    x:Name="coinsText"   
-                    Background="DarkGray"
-                    Canvas.Right="0"
-                    Canvas.Top="45"
-                    Height="40"
-                    MinWidth="70"
-                    Opacity="0.5"
-                    Text="0"
-                    TextAlignment="Right"
-                    FontSize="30"
-                    Panel.ZIndex="2">
-                </TextBlock>
+            <Canvas>
+                <!--Current Game-->
+                <Canvas
+                    Width="1280"
+                    Height="800"
+                    x:Name="gameCanvas"
+                    Visibility="Hidden">
+                    <StackPanel 
+                        x:Name="healthUi"
+                        Orientation="Horizontal"
+                        Margin="10"
+                        Panel.ZIndex="100">
+                    </StackPanel>
+                    <TextBlock
+                        x:Name="ammoText"   
+                        Canvas.Bottom="0"
+                        Background="DarkGray"
+                        Opacity="0.5"
+                        Width="105"
+                        Height="45"
+                        Text=""
+                        FontSize="40"
+                        Panel.ZIndex="100">
+                    </TextBlock>
+                    <TextBlock
+                        x:Name="scoreText"   
+                        Background="DarkGray"
+                        Canvas.Right="0"
+                        Height="40"
+                        MinWidth="100"
+                        Opacity="0.5"
+                        Text="0"
+                        TextAlignment="Right"
+                        FontSize="30"
+                        Panel.ZIndex="100">
+                    </TextBlock>
+                    <TextBlock
+                        x:Name="coinsText"   
+                        Background="DarkGray"
+                        Canvas.Right="0"
+                        Canvas.Top="45"
+                        Height="40"
+                        MinWidth="70"
+                        Opacity="0.5"
+                        Text="0"
+                        TextAlignment="Right"
+                        FontSize="30"
+                        Panel.ZIndex="100">
+                    </TextBlock>
+                </Canvas>
                 <!--Stop Canvas-->
                 <Canvas
                     x:Name="stopCanvas"
@@ -140,19 +143,27 @@
                         </Button>
                     </StackPanel>
                 </Canvas>
+                <!--Shop Canvas-->
                 <Canvas
                     x:Name="shopCanvas"
-                    Visibility="Visible">
+                    Visibility="Hidden">
+                    <!--Player Upgrades-->
                     <StackPanel
                         Background="DarkCyan"
                         Canvas.Top="100"
                         Canvas.Left="150"
                         Width="300"
                         Height="400">
+                        <TextBlock
+                            Width="220"
+                            Height="40"
+                            Text="Player Upgrades" 
+                            FontSize="30">
+                        </TextBlock>
                         <StackPanel
                             MinHeight="100"
                             Orientation="Horizontal"
-                            Margin="10,0,10,50">
+                            Margin="10,0,10,30">
                             <TextBlock
                                 Width="150"
                                 Height="40"
@@ -178,7 +189,7 @@
                         <StackPanel
                             MinHeight="100"
                             Orientation="Horizontal"
-                            Margin="10,0,10,50">
+                            Margin="10,0,10,30">
                             <TextBlock
                                 Width="150"
                                 Height="40"
@@ -204,7 +215,7 @@
                         <StackPanel
                             MinHeight="100"
                             Orientation="Horizontal"
-                            Margin="10,0,10,50">
+                            Margin="10,0,10,30">
                             <TextBlock
                                 Width="150"
                                 Height="40"
@@ -228,21 +239,128 @@
                             </Button>
                         </StackPanel>
                     </StackPanel>
+                    <!--Gun Upgrades-->
                     <StackPanel
                         Canvas.Top="100"
                         Canvas.Left="500"
                         Width="350"
                         Height="400"
                         Background="PowderBlue">
-
+                        <TextBlock
+                            Width="200"
+                            Height="40"
+                            Text="Gun Upgrades" 
+                            FontSize="30">
+                        </TextBlock>
+                        <StackPanel
+                                MinHeight="100"
+                                Orientation="Horizontal"
+                                Margin="10,0,10,30">
+                            <TextBlock
+                                Width="195"
+                                Height="40"
+                                Text="ASPD:+0" 
+                                FontSize="30">
+                            </TextBlock>
+                            <TextBlock
+                                TextAlignment="Right"
+                                Width="60"
+                                Height="40"
+                                Text="10"
+                                Margin="0,0,10,0"
+                                FontSize="30">
+                            </TextBlock>
+                            <Button
+                                Width="60"
+                                Height="50"
+                                Content="Buy" 
+                                CommandParameter="Hp">
+                            </Button>
+                        </StackPanel>
+                        <StackPanel
+                                MinHeight="100"
+                                Orientation="Horizontal"
+                                Margin="10,0,10,30">
+                            <TextBlock
+                                Width="195"
+                                Height="40"
+                                Text="AMMO:+0" 
+                                FontSize="30">
+                            </TextBlock>
+                            <TextBlock
+                                TextAlignment="Right"
+                                Width="60"
+                                Height="40"
+                                Text="10"
+                                Margin="0,0,10,0"
+                                FontSize="30">
+                            </TextBlock>
+                            <Button
+                                Width="60"
+                                Height="50"
+                                Content="Buy" 
+                                CommandParameter="Hp">
+                            </Button>
+                        </StackPanel>
+                        <StackPanel
+                            MinHeight="100"
+                            Orientation="Horizontal"
+                            Margin="10,0,10,30">
+                            <TextBlock
+                                Width="195"
+                                Height="40"
+                                Text="SPREAD:+0" 
+                                FontSize="30">
+                            </TextBlock>
+                            <TextBlock
+                                TextAlignment="Right"
+                                Width="60"
+                                Height="40"
+                                Text="10"
+                                Margin="0,0,10,0"
+                                FontSize="30">
+                            </TextBlock>
+                            <Button
+                                Width="60"
+                                Height="50"
+                                Content="Buy" 
+                                CommandParameter="Hp"/>
+                        </StackPanel>
                     </StackPanel>
+                    <!--Gun Panel-->
+                    <StackPanel
+                        Height="100"
+                        Width="700"
+                        Canvas.Left="150"
+                        Canvas.Top="550"
+                        Background="Aquamarine">
+                        
+                    </StackPanel>
+                    <!--Menu Panel-->
                     <StackPanel
                         Canvas.Top="100"
                         Canvas.Left="900"
                         Width="250"
                         Height="550">
-                        <Button>
-
+                        <Button
+                            Width="250"
+                            Height="100"
+                            Margin="0,0,0,125"
+                            Content="Next Round"
+                            FontSize="30">
+                        </Button>
+                        <Button
+                            Width="250"
+                            Height="100"
+                            Margin="0,0,0,125"
+                            Content="Leader Board"
+                            FontSize="30">
+                        </Button>
+                        <Button
+                            Width="250"
+                            Height="100"
+                            Content="Exit"
+                            FontSize="30">
                         </Button>
                     </StackPanel>
                 </Canvas>
