@@ -14,15 +14,15 @@ namespace MiniRambo
         private double _Speed = 5;
         private bool _Is_Enemy = false;
         private double _Angle { get; set; }
-
         private double _Top {  get; set; }
         private double _Left { get; set; }
+
         private List<Enemy> _All_Enemies { get; set; }
         private Player_Info _Player;
         private Canvas _Game_Canvas;
         private Canvas _Stop_Canvas;
         private Ellipse _Bullet;
-        private SolidColorBrush _Bullet_Color;
+        private SolidColorBrush _Bullet_Color = Brushes.Black;
 
         public Projectile(Enemy? enemy = null)
         {
@@ -37,7 +37,6 @@ namespace MiniRambo
                     _Angle = _Player.Angle;
                     _Top = Canvas.GetTop(_Player.Player_Ellipse);
                     _Left = Canvas.GetLeft(_Player.Player_Ellipse);
-                    _Bullet_Color = Brushes.Black;
                 }
             }
             else
@@ -93,7 +92,7 @@ namespace MiniRambo
             {
                 foreach (Enemy enemy in _All_Enemies)
                 {
-                    if (projectile.IntersectsWith(enemy.Enemy_Hitbox) && enemy.Allive)
+                    if (enemy.Allive && projectile.IntersectsWith(enemy.Enemy_Hitbox))
                     {
                         enemy.EnemyHit(1);
                         return true;
@@ -119,7 +118,6 @@ namespace MiniRambo
 
                     if (Canvas.GetLeft(_Bullet) < 0 || Canvas.GetLeft(_Bullet) > _Game_Canvas.Width || Canvas.GetTop(_Bullet) < 0 || Canvas.GetTop(_Bullet) > _Game_Canvas.Height)
                     {
-                        _Game_Canvas.Children.Remove(_Bullet);
                         break;
                     }
                     if (ProjectileTouched())

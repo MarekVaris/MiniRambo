@@ -15,6 +15,44 @@
     KeyUp="WindowKeyUp"
     MouseLeftButtonDown="WinMouseClick"
     MouseMove="WinMouseMove">
+
+    <Window.Resources>
+        <!--Custom Button-->
+        <Style 
+            x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2C3E50"/>
+            <Setter Property="Foreground" Value="#ECF0F1"/>
+            <Setter Property="FontSize" Value="36"/>
+            <Setter Property="MinHeight" Value="100"/>
+            <Setter Property="Margin" Value="0,0,0,100"/>
+            <Setter Property="FontFamily" Value="Bahnschrift Light"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="15"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF444444"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--Custom TextBlock-->
+        <Style 
+            x:Key="CustomTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="Height" Value="35"/>
+            <Setter Property="TextAlignment" Value="Right"/>
+            <Setter Property="Panel.ZIndex" Value="100"/>
+            <Setter Property="FontFamily" Value="Bahnschrift Light"/>
+        </Style>
+    </Window.Resources>
+
     <Viewbox Stretch="Fill">
         <Canvas
             Width="1280"
@@ -30,32 +68,18 @@
                     Canvas.Top="200"
                     Visibility="Visible">
                     <Button 
-                        Background="DarkGray"
-                        Opacity="0.5"
-                        Click="StartGameClick"
-                        MinHeight="100"
-                        Margin="0,0,0,100" 
-                        Content="Start Game" 
-                        FontSize="36">
-                    </Button>
+                        Style="{StaticResource CustomButtonStyle}" 
+                        Click="StartGameClick" 
+                        Content="Start Game"/>
                     <Button 
-                        Background="DarkGray"
-                        Opacity="0.5"
-                        Click="SettingClick"
-                        MinHeight="100"
-                        Margin="0,0,0,100" 
-                        Content="Setting" 
-                        FontSize="36">
-                    </Button>
+                        Style="{StaticResource CustomButtonStyle}" 
+                        Click="SettingClick" 
+                        Content="Settings"/>
                     <Button 
-                        Background="DarkGray"
-                        Opacity="0.5"
-                        Click="LeaveGame"
-                        MinHeight="100"
-                        Margin="0,0,0,0"
-                        Content="Leave Game" 
-                        FontSize="36">
-                    </Button>
+                        Style="{StaticResource CustomButtonStyle}" 
+                        Click="LeaveGame" 
+                        Margin="0,0,0,0" 
+                        Content="Leave Game"/>
                 </StackPanel>
             </Canvas>
             <!--GameCanvas-->
@@ -73,41 +97,77 @@
                         Panel.ZIndex="100">
                     </StackPanel>
                     <TextBlock
-                        x:Name="ammoText"   
+                        x:Name="ammoText"
+                        Style="{StaticResource CustomTextBlockStyle}"
+                        TextAlignment= "Left"
                         Canvas.Bottom="0"
-                        Background="DarkGray"
-                        Opacity="0.5"
-                        Width="105"
-                        Height="45"
-                        Text=""
-                        FontSize="40"
-                        Panel.ZIndex="100">
+                        MinWidth="80"
+                        Text="0/0"
+                        FontSize="30">
+                        <TextBlock.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#4C000000" Offset="1"/>
+                                <GradientStop Color="#B2655745" Offset="0.513"/>
+                                <GradientStop Color="#B2000000" Offset="0.996"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Background>
                     </TextBlock>
                     <TextBlock
-                        x:Name="scoreText"   
-                        Background="DarkGray"
-                        Canvas.Right="0"
-                        Height="40"
-                        MinWidth="100"
-                        Opacity="0.5"
-                        Text="0"
-                        TextAlignment="Right"
-                        FontSize="30"
-                        Panel.ZIndex="100">
-                    </TextBlock>
-                    <TextBlock
-                        x:Name="coinsText"   
-                        Background="DarkGray"
-                        Canvas.Right="0"
-                        Canvas.Top="45"
-                        Height="40"
+                        x:Name="scoreText"
+                        Style="{StaticResource CustomTextBlockStyle}"
                         MinWidth="70"
-                        Opacity="0.5"
-                        Text="0"
-                        TextAlignment="Right"
-                        FontSize="30"
-                        Panel.ZIndex="100">
+                        Canvas.Right="0"
+                        Text="0">
+                        <TextBlock.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#B2000000" Offset="1"/>
+                                <GradientStop Color="#B2879E00" Offset="0.461"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Background>
                     </TextBlock>
+                    <TextBlock
+                        x:Name="coinsText"
+                        Style="{StaticResource CustomTextBlockStyle}"
+                        MinWidth="40"
+                        Canvas.Right="0"
+                        Canvas.Top="40"
+                        Text="0">
+                        <TextBlock.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#B2000000" Offset="1"/>
+                                <GradientStop Color="#B2DCC900" Offset="0.422"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <ProgressBar 
+                        x:Name="nextLvlBar"
+                        Value="0"
+                        ValueChanged="UpdateStatusBar"
+                        Canvas.Left="250"
+                        Canvas.Bottom="0"
+                        Width="800"
+                        Height="20"
+                        BorderThickness="0"
+                        Foreground="#FF4C6DAF"
+                        Margin="0,0,0,10" Background="#4C717171">
+                        <ProgressBar.Template>
+                            <ControlTemplate TargetType="ProgressBar">
+                                <Border BorderBrush="Black" BorderThickness="1" Background="{TemplateBinding Background}">
+                                    <Grid x:Name="PART_Track">
+                                        <Rectangle x:Name="PART_Indicator" HorizontalAlignment="Left" Fill="{TemplateBinding Foreground}"/>
+                                    </Grid>
+                                </Border>
+                            </ControlTemplate>
+                        </ProgressBar.Template>
+                    </ProgressBar>
+                    <TextBlock
+                        x:Name="statusBarReady"
+                        Text="Press 'E' for next lvl"
+                        Visibility="Hidden"
+                        Canvas.Left="600"
+                        Canvas.Bottom="10"
+                        Foreground="White"
+                        FontSize="14"/>
                 </Canvas>
                 <!--Stop Canvas-->
                 <Canvas
@@ -126,20 +186,14 @@
                             FontSize="50"
                             TextAlignment="Center"/>
                         <Button 
-                            Background="DarkGray"
-                            Opacity="0.5"
+                            Style="{StaticResource CustomButtonStyle}" 
                             Click="RestartGame"
-                            MinHeight="100"
-                            Margin="0,0,0,100" 
-                            Content="Restart Game" FontSize="36">
+                            Content="Restart Game">
                         </Button>
                         <Button 
-                            Background="DarkGray"
-                            Opacity="0.5"
+                            Style="{StaticResource CustomButtonStyle}" 
                             Click="LeaveGame"
-                            MinHeight="100"
-                            Margin="0,0,0,0" 
-                            Content="Exit Game" FontSize="36">
+                            Content="Exit Game">
                         </Button>
                     </StackPanel>
                 </Canvas>
@@ -334,7 +388,7 @@
                         Canvas.Left="150"
                         Canvas.Top="550"
                         Background="Aquamarine">
-                        
+
                     </StackPanel>
                     <!--Menu Panel-->
                     <StackPanel
@@ -368,3 +422,4 @@
         </Canvas>
     </Viewbox>
 </Window>
+    

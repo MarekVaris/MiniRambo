@@ -20,22 +20,21 @@ namespace MiniRambo
         public Ellipse Enemy_Ellipse { get; set; }
         public Rect Enemy_Hitbox { get; set; }
 
-        private bool _Has_Gun = false;
         private int _Hp { get; set; } = 2;
         private double _Speed { get; set; } = 0;
+        private int _Type { get; set; } = 1;
         private int _Current_Lvl { get; set; }
         private Canvas _Game_Canvas { get; set; }
         private Canvas _Stop_Canvas { get; set; }
         private Player_Info _Player { get; set; }
-        private Gun _Enemy_Gun { get; set; }
+        private Gun? _Enemy_Gun { get; set; }
 
         public Enemy()
         {
             if (MainWindow.Instance != null && MainWindow.Instance.Player != null)
             {
-                _Current_Lvl = MainWindow.Instance.Lvl;
-
                 _Player = MainWindow.Instance.Player;
+                _Current_Lvl = MainWindow.Instance.Lvl;
                 _Game_Canvas = MainWindow.Instance.Game_Canvas;
                 _Stop_Canvas = MainWindow.Instance.Stop_Canvas;
             }
@@ -43,7 +42,6 @@ namespace MiniRambo
                 throw new InvalidOperationException();
 
             Enemy_Ellipse = CreateEnemy();
-            _Enemy_Gun = new Gun();
             _ = EnemyMove();
         }
 
@@ -66,13 +64,15 @@ namespace MiniRambo
             Random random = new Random();
             if (_Current_Lvl>1 && random.Next(0, 4) == 1)
             {
+                _Type = 2;
                 enemyEllipse.Fill = MainWindow.Instance?.LoadImg("Enemy2.png");
-                _Has_Gun = true;
+                _Enemy_Gun = new Gun();
             }
             else
             {
                 enemyEllipse.Fill = MainWindow.Instance?.LoadImg("Enemy.png");
             }
+            _Hp = _Current_Lvl + _Type;
 
             RotateTransform rotateTransform = new RotateTransform();
             rotateTransform.Angle = 0;
@@ -141,7 +141,7 @@ namespace MiniRambo
 
                     EnemyTouchPlayer();
 
-                    if (_Has_Gun)
+                    if (_Enemy_Gun != null)
                     {
                         if(fireCoolDown > 100)
                         {
@@ -154,18 +154,21 @@ namespace MiniRambo
                 }
                 await Task.Delay(10);
             }
-            AddPoints();
-            Allive = false;
-            Enemy_Ellipse.Opacity = 0.4;        
+            if (_Hp <= 0)
+            {
+                AddPoints();
+                Enemy_Ellipse.Opacity = 0.4;        
+            }
         }
 
         private void AddPoints()
         {
             if (MainWindow.Instance != null)
             {
-                MainWindow.Instance.Score += 100 * _Current_Lvl;
-                MainWindow.Instance.Coins += 5 * _Current_Lvl;
+                MainWindow.Instance.Score += 100 * _Current_Lvl * _Type;
+                MainWindow.Instance.Coins += 5 * _Current_Lvl * _Type;
 
+                MainWindow.Instance.nextLvlBar.Value += 10 * _Current_Lvl;
                 MainWindow.Instance.UpdatePoints();
             }
         }
