@@ -50,6 +50,14 @@ namespace MiniRambo
                 _Left = Canvas.GetLeft(enemy.Enemy_Ellipse);
                 _Bullet_Color = Brushes.Red;
             }
+            else
+            {
+                double newAngle = _Angle;
+                Random random = new Random();
+                int randomFactor = random.Next((int)-_Player.Proj_Spread, (int)_Player.Proj_Spread);
+                newAngle += randomFactor;
+                _Angle = newAngle;
+            }
 
             _Bullet = CreateProjectile();
             _ = MoveBullet();
@@ -104,11 +112,12 @@ namespace MiniRambo
 
         private async Task MoveBullet()
         {
-            while(true)
+            double angle = _Angle;
+
+            while (true)
             {   
                 if (_Stop_Canvas.Visibility != Visibility.Visible || _Player.Hp <= 0)
                 {
-                    double angle = _Angle;
 
                     double deltaX = Math.Cos(angle * Math.PI / 180) * _Speed;
                     double deltaY = Math.Sin(angle * Math.PI / 180) * _Speed;
