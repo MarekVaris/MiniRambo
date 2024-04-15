@@ -52,6 +52,13 @@ namespace MiniRambo
                 if (Stop_Canvas.Visibility == Visibility.Hidden)
                 {
                     Player.PlayerMove();
+                    if (Player.Player_Gun.Ready_To_Shoot < 100)
+                        Player.Player_Gun.Ready_To_Shoot += Player.A_Speed;
+                    if (Player.Proj_Spread > 0)
+                        Player.Proj_Spread -= 0.1;
+                    else
+                        Player.Proj_Spread = 0;
+
 
                     if (_Enemy_Spawning_Rate > 100)
                     {

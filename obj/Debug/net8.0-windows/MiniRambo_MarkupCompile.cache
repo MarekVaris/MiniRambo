@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\GitHub\MiniRambo\obj\Debug\net8.0-windows\
+C:\GitHub\MiniRambo\obj\Debug\net8.0-windows\
 MiniRambo
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-D:\GitHub\MiniRambo\App.xaml
+C:\GitHub\MiniRambo\App.xaml
 11407045341
 
 9-747178837
-198155382431
+198915248976
 MainWindow.xaml;
 
 False

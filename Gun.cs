@@ -15,6 +15,7 @@ namespace MiniRambo
     public class Gun
     {
         public bool Reloading = false;
+        public double Ready_To_Shoot { get; set; } = 100;
 
         private int _Reload_Speed { get; set; }
         private int _Max_Ammo { get; set; }
@@ -28,8 +29,7 @@ namespace MiniRambo
             _Reload_Speed = reloadSpeed;
             if (ui)
             {
-                if (MainWindow.Instance != null &&
-                    MainWindow.Instance.ammoText != null)
+                if (MainWindow.Instance != null)
                 {
                     _Ammo_Text = MainWindow.Instance.ammoText;
                     _Ammo_Text.Text = $"{_Max_Ammo}/{_Current_Ammo}";
@@ -61,10 +61,18 @@ namespace MiniRambo
             }
             else if (_Current_Ammo > 0)
             {
-                _Current_Ammo--;
-                if (_Ammo_Text != null)
-                    _Ammo_Text.Text = $"{_Max_Ammo}/{_Current_Ammo}";
-                _ = new Projectile();
+                if (Ready_To_Shoot >= 10)
+                {
+                    _Current_Ammo--;
+                    _ = new Projectile();
+                    if (_Ammo_Text != null && MainWindow.Instance != null)
+                    {
+                        _Ammo_Text.Text = $"{_Max_Ammo}/{_Current_Ammo}";
+                        if(MainWindow.Instance.Player.Proj_Spread < 15)
+                            MainWindow.Instance.Player.Proj_Spread += 5;
+                    }
+                    Ready_To_Shoot = 0;
+                }
             }
             else
                 Reload();

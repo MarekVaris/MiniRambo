@@ -15,6 +15,8 @@ namespace MiniRambo
     {
         public int Hp { get; set; }
         public double Speed { get; set; }
+        public double Proj_Spread { get; set; } = 0;
+        public double A_Speed { get; set; } = 1;
         public double X { get; set; }
         public double Y { get; set; }
         public double Angle { get; set; }
@@ -77,7 +79,7 @@ namespace MiniRambo
                         Player_Gun.Reload();
                     break;
                 case Key.Space:
-                    if (Hp > 0 && Stop_Canvas.Visibility != Visibility.Visible && Game_Canvas.Visibility == Visibility.Visible)
+                    if (idle && Hp > 0 && Stop_Canvas.Visibility != Visibility.Visible && Game_Canvas.Visibility == Visibility.Visible)
                         Player_Gun.Shoot();
                     break;
             }
@@ -115,8 +117,8 @@ namespace MiniRambo
             RotateTransform? rotateTransform = Player_Ellipse.RenderTransform as RotateTransform;
             if (rotateTransform != null)
             {
-                Angle = rotateTransform.Angle;
                 rotateTransform.Angle = angle;
+                Angle = rotateTransform.Angle;
             }
         }
 
