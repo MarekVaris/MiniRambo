@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows;
 using System.Numerics;
+using System.Reflection.Metadata;
 
 namespace MiniRambo
 {
@@ -24,7 +25,6 @@ namespace MiniRambo
         public Gun Player_Gun { get; set; }
         public Rect Player_Hitbox { get; set; }
 
-        private int Max_Hp { get; set; }
         private List<double> Current_Move { get; set; } = new List<double> { 0, 0 };
         private Canvas Game_Canvas { get; set; }
         private Canvas Stop_Canvas { get; set; }
@@ -34,11 +34,11 @@ namespace MiniRambo
 
         public Player_Info(int hp, double speed)
         {
-            Max_Hp = hp;
-            Hp = Max_Hp;
+            
             Speed = speed;
             if (MainWindow.Instance != null)
             {
+                Hp = hp;
                 Health_Ui = MainWindow.Instance.healthUi;
                 UpdateHealthUi();
 
@@ -52,8 +52,27 @@ namespace MiniRambo
                 throw new InvalidOperationException();
             Player_Ellipse = CreatePlayer();
 
-            Player_Gun = new Gun(12, 2000, true);
+            Player_Gun = new Gun(12 + MainWindow.Instance.Shop_Game.Main_Shop[4], true);
         }
+
+        public void UpdateHealthUi()
+        {
+            while (Health_Ui.Children.Count > 0)
+            {
+                Health_Ui.Children.RemoveAt(0);
+            }
+
+            for (int i = Health_Ui.Children.Count; i < Hp; i++)
+            {
+                Rectangle rect = new Rectangle();
+                rect.Fill = MainWindow.Instance?.LoadImg("Heart.png");
+                rect.Height = 40;
+                rect.Width = 40;
+                rect.Margin = new Thickness(5);
+                Health_Ui.Children.Add(rect);
+            }
+        }
+
         public void PlayerInput(KeyEventArgs e, bool idle = false)
         {
             switch (e.Key)
@@ -79,8 +98,11 @@ namespace MiniRambo
                         Player_Gun.Reload();
                     break;
                 case Key.Space:
-                    if (idle && Hp > 0 && Stop_Canvas.Visibility != Visibility.Visible && Game_Canvas.Visibility == Visibility.Visible)
-                        Player_Gun.Shoot();
+                    if (idle && Hp > 0 
+                        && Stop_Canvas.Visibility != Visibility.Visible 
+                        && Game_Canvas.Visibility == Visibility.Visible 
+                        && MainWindow.Instance?.Shop_Canvas.Visibility != Visibility.Visible)
+                            Player_Gun.Shoot();
                     break;
             }
         }
@@ -153,23 +175,6 @@ namespace MiniRambo
             }
         }
 
-        private void UpdateHealthUi()
-        {
-            while (Health_Ui.Children.Count > 0)
-            {
-                Health_Ui.Children.RemoveAt(0);
-            }
-
-            for (int i = Health_Ui.Children.Count; i < Hp; i++)
-            {
-                Rectangle rect = new Rectangle();
-                rect.Fill = MainWindow.Instance?.LoadImg("Heart.png");
-                rect.Height = 40;
-                rect.Width = 40;
-                rect.Margin = new Thickness(5);
-                Health_Ui.Children.Add(rect);
-            }
-        }
 
         private Ellipse CreatePlayer()
         {

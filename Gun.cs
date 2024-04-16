@@ -17,16 +17,15 @@ namespace MiniRambo
         public bool Reloading = false;
         public double Ready_To_Shoot { get; set; } = 100;
 
-        private int _Reload_Speed { get; set; }
+        private int _Reload_Speed { get; set; } = 2000;
         private int _Max_Ammo { get; set; }
         private int _Current_Ammo { get; set; }
         private TextBlock? _Ammo_Text { get; set; }
 
-        public Gun(int maxAmmo = 0, int reloadSpeed = 0, bool ui = false)
+        public Gun(int maxAmmo = 0, bool ui = false)
         {
             _Max_Ammo = maxAmmo;
             _Current_Ammo = _Max_Ammo;
-            _Reload_Speed = reloadSpeed;
             if (ui)
             {
                 if (MainWindow.Instance != null)
@@ -61,7 +60,7 @@ namespace MiniRambo
             }
             else if (_Current_Ammo > 0)
             {
-                if (Ready_To_Shoot >= 10)
+                if (Ready_To_Shoot >= 50)
                 {
                     _Current_Ammo--;
                     _ = new Projectile();
@@ -77,6 +76,5 @@ namespace MiniRambo
             else
                 Reload();
         }
-
     }
 }

@@ -25,7 +25,6 @@ namespace MiniRambo
         private int _Type { get; set; } = 1;
         private int _Current_Lvl { get; set; }
         private Canvas _Game_Canvas { get; set; }
-        private Canvas _Stop_Canvas { get; set; }
         private Player_Info _Player { get; set; }
         private Gun? _Enemy_Gun { get; set; }
 
@@ -36,7 +35,6 @@ namespace MiniRambo
                 _Player = MainWindow.Instance.Player;
                 _Current_Lvl = MainWindow.Instance.Lvl;
                 _Game_Canvas = MainWindow.Instance.Game_Canvas;
-                _Stop_Canvas = MainWindow.Instance.Stop_Canvas;
             }
             else
                 throw new InvalidOperationException();
@@ -47,7 +45,8 @@ namespace MiniRambo
 
         public void EnemyHit(int dmg)
         {
-            _Hp -= dmg;
+            if (MainWindow.Instance != null)
+                _Hp -= dmg + MainWindow.Instance.Shop_Game.Main_Shop[1];
             if (_Hp <= 0)
             {
                 Allive = false;
@@ -120,9 +119,9 @@ namespace MiniRambo
         {
             int fireCoolDown = 0;
 
-            while (Allive)
+            while (Allive && MainWindow.Instance?.Shop_Canvas.Visibility != Visibility.Visible)
             {
-                if (_Stop_Canvas.Visibility != Visibility.Visible)
+                if (MainWindow.Instance?.Stop_Canvas.Visibility != Visibility.Visible)
                 {
 
                     double angle = Math.Atan2(_Player.Y - Canvas.GetTop(Enemy_Ellipse), _Player.X - Canvas.GetLeft(Enemy_Ellipse)) * (180 / Math.PI);

@@ -42,6 +42,32 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!--Custom Shop Button-->
+        <Style 
+            x:Key="CustomShopButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#2C3E50"/>
+            <Setter Property="Foreground" Value="#ECF0F1"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="Content" Value="Buy"/>
+            <Setter Property="FontFamily" Value="Bahnschrift Light"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="15"/>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF444444"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <!--Custom TextBlock-->
         <Style 
             x:Key="CustomTextBlockStyle" TargetType="TextBlock">
@@ -62,11 +88,11 @@
                 x:Name="mainMenu"
                 Width="1280"
                 Height="800"
-                Opacity="1">
+                Opacity="1"
+                Visibility="Visible">
                 <StackPanel
                     Canvas.Left="550" 
-                    Canvas.Top="200"
-                    Visibility="Visible">
+                    Canvas.Top="200">
                     <Button 
                         Style="{StaticResource CustomButtonStyle}" 
                         Click="StartGameClick" 
@@ -200,10 +226,12 @@
                 <!--Shop Canvas-->
                 <Canvas
                     x:Name="shopCanvas"
+                    Width="1280"
+                    Height="800"
                     Visibility="Hidden">
                     <!--Player Upgrades-->
                     <StackPanel
-                        Background="DarkCyan"
+                        Background="#7F008B8B"
                         Canvas.Top="100"
                         Canvas.Left="150"
                         Width="300"
@@ -215,6 +243,7 @@
                             FontSize="30">
                         </TextBlock>
                         <StackPanel
+                            x:Name="shopHp"
                             MinHeight="100"
                             Orientation="Horizontal"
                             Margin="10,0,10,30">
@@ -232,15 +261,13 @@
                                 Margin="0,0,10,0"
                                 FontSize="30">
                             </TextBlock>
-                            <Button
-                                Width="60"
-                                Height="50"
-                                Content="Buy" 
+                            <Button 
+                                Style="{StaticResource CustomShopButtonStyle}" 
                                 CommandParameter="Hp"
-                                Click="StatsBuy">
-                            </Button>
+                                Click="StatsBuy"/>
                         </StackPanel>
                         <StackPanel
+                            x:Name="shopDmg"
                             MinHeight="100"
                             Orientation="Horizontal"
                             Margin="10,0,10,30">
@@ -259,21 +286,19 @@
                                 FontSize="30">
                             </TextBlock>
                             <Button
-                                Width="60"
-                                Height="50"
-                                Content="Buy" 
-                                CommandParameter="Hp"
-                                Click="StatsBuy">
-                            </Button>
+                                Style="{StaticResource CustomShopButtonStyle}"  
+                                CommandParameter="Dmg"
+                                Click="StatsBuy"/>
                         </StackPanel>
                         <StackPanel
+                            x:Name="shopMSpd"
                             MinHeight="100"
                             Orientation="Horizontal"
                             Margin="10,0,10,30">
                             <TextBlock
                                 Width="150"
-                                Height="40"
-                                Text="SPD:+0" 
+                                Height="40" 
+                                Text="MSPD:+0"
                                 FontSize="30">
                             </TextBlock>
                             <TextBlock
@@ -285,12 +310,9 @@
                                 FontSize="30">
                             </TextBlock>
                             <Button
-                                Width="60"
-                                Height="50"
-                                Content="Buy" 
-                                CommandParameter="Hp"
-                                Click="StatsBuy">
-                            </Button>
+                                Style="{StaticResource CustomShopButtonStyle}" 
+                                CommandParameter="MSpd"
+                                Click="StatsBuy"/>
                         </StackPanel>
                     </StackPanel>
                     <!--Gun Upgrades-->
@@ -299,7 +321,7 @@
                         Canvas.Left="500"
                         Width="350"
                         Height="400"
-                        Background="PowderBlue">
+                        Background="#7FB0E0E6">
                         <TextBlock
                             Width="200"
                             Height="40"
@@ -307,9 +329,10 @@
                             FontSize="30">
                         </TextBlock>
                         <StackPanel
-                                MinHeight="100"
-                                Orientation="Horizontal"
-                                Margin="10,0,10,30">
+                            x:Name="shopASpd"
+                            MinHeight="100"
+                            Orientation="Horizontal"
+                            Margin="10,0,10,30">
                             <TextBlock
                                 Width="195"
                                 Height="40"
@@ -325,16 +348,15 @@
                                 FontSize="30">
                             </TextBlock>
                             <Button
-                                Width="60"
-                                Height="50"
-                                Content="Buy" 
-                                CommandParameter="Hp">
-                            </Button>
+                                Style="{StaticResource CustomShopButtonStyle}" 
+                                CommandParameter="ASpd"
+                                Click="StatsBuy"/>
                         </StackPanel>
                         <StackPanel
-                                MinHeight="100"
-                                Orientation="Horizontal"
-                                Margin="10,0,10,30">
+                            x:Name="shopAmmo"
+                            MinHeight="100"
+                            Orientation="Horizontal"
+                            Margin="10,0,10,30">
                             <TextBlock
                                 Width="195"
                                 Height="40"
@@ -350,13 +372,12 @@
                                 FontSize="30">
                             </TextBlock>
                             <Button
-                                Width="60"
-                                Height="50"
-                                Content="Buy" 
-                                CommandParameter="Hp">
-                            </Button>
+                                Style="{StaticResource CustomShopButtonStyle}" 
+                                CommandParameter="Ammo"
+                                Click="StatsBuy"/>
                         </StackPanel>
                         <StackPanel
+                            x:Name="shopSpread"
                             MinHeight="100"
                             Orientation="Horizontal"
                             Margin="10,0,10,30">
@@ -375,10 +396,9 @@
                                 FontSize="30">
                             </TextBlock>
                             <Button
-                                Width="60"
-                                Height="50"
-                                Content="Buy" 
-                                CommandParameter="Hp"/>
+                                Style="{StaticResource CustomShopButtonStyle}" 
+                                CommandParameter="Spread"
+                                Click="StatsBuy"/>
                         </StackPanel>
                     </StackPanel>
                     <!--Gun Panel-->
@@ -387,7 +407,7 @@
                         Width="700"
                         Canvas.Left="150"
                         Canvas.Top="550"
-                        Background="Aquamarine">
+                        Background="#7F7FFFD4">
 
                     </StackPanel>
                     <!--Menu Panel-->
@@ -397,25 +417,17 @@
                         Width="250"
                         Height="550">
                         <Button
-                            Width="250"
-                            Height="100"
-                            Margin="0,0,0,125"
+                            Style="{StaticResource CustomButtonStyle}"
                             Content="Next Round"
-                            FontSize="30">
-                        </Button>
+                            Click="StartNextRound"/>
                         <Button
-                            Width="250"
-                            Height="100"
+                            Style="{StaticResource CustomButtonStyle}" 
                             Margin="0,0,0,125"
-                            Content="Leader Board"
-                            FontSize="30">
-                        </Button>
+                            Content="Leader Board"/>
                         <Button
-                            Width="250"
-                            Height="100"
+                            Style="{StaticResource CustomButtonStyle}"
                             Content="Exit"
-                            FontSize="30">
-                        </Button>
+                            Click="LeaveGame"/>
                     </StackPanel>
                 </Canvas>
             </Canvas>

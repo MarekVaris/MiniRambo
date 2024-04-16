@@ -52,11 +52,16 @@ namespace MiniRambo
             }
             else
             {
-                double newAngle = _Angle;
-                Random random = new Random();
-                int randomFactor = random.Next((int)-_Player.Proj_Spread, (int)_Player.Proj_Spread);
-                newAngle += randomFactor;
-                _Angle = newAngle;
+                double currentAngle = _Player.Proj_Spread;
+                if (currentAngle > MainWindow.Instance.Shop_Game.Main_Shop[5])
+                {
+                    double newAngle = _Angle;
+                    currentAngle -= MainWindow.Instance.Shop_Game.Main_Shop[5];
+                    Random random = new Random();
+                    int randomFactor = random.Next((int)-currentAngle, (int)currentAngle);
+                    newAngle += randomFactor;
+                    _Angle = newAngle;
+                }
             }
 
             _Bullet = CreateProjectile();
@@ -114,7 +119,7 @@ namespace MiniRambo
         {
             double angle = _Angle;
 
-            while (true)
+            while(MainWindow.Instance?.Shop_Canvas.Visibility != Visibility.Visible)
             {   
                 if (_Stop_Canvas.Visibility != Visibility.Visible || _Player.Hp <= 0)
                 {
