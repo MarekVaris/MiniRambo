@@ -22,7 +22,7 @@ namespace MiniRambo
         private Canvas _Game_Canvas;
         private Canvas _Stop_Canvas;
         private Ellipse _Bullet;
-        private SolidColorBrush _Bullet_Color = Brushes.Black;
+        private SolidColorBrush _Bullet_Color = Brushes.DarkOrange;
 
         public Projectile(Enemy? enemy = null)
         {

@@ -25,7 +25,7 @@ namespace MiniRambo
                 {
                     case "Hp":
                         SetStat("HP:+", MainWindow.Instance.shopHp, 0);
-                        MainWindow.Instance.Player.UpdateHealthUi();
+                        MainWindow.Instance.Player.UpdateHealthUi(Main_Shop[0]);
                         break;
                     case "Dmg":
                         SetStat("DMG:+", MainWindow.Instance.shopDmg, 1);

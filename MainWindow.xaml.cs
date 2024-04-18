@@ -9,13 +9,18 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows.Controls.Primitives;
+using static System.Formats.Asn1.AsnWriter;
+using System.IO;
+using System.Xml.Linq;
+using System.Collections.ObjectModel;
+using System.Xml;
 
 namespace MiniRambo
 {
     public partial class MainWindow : Window
     {
         public int Lvl { get; set; } = 1;
-        public int Score { get; set; } = 0;
+        public int Current_Score { get; set; } = 0;
         public int Coins { get; set; } = 0;
         public Shop Shop_Game { get; set; }
 
@@ -27,6 +32,7 @@ namespace MiniRambo
         public Player_Info Player {  get; set; }
         public static MainWindow? Instance { get; private set; }
         private bool _Bar_Ready { get; set; } = false;
+        private string _Player_Name { get; set; } = "Player001";
         
 
         public MainWindow()
@@ -47,6 +53,7 @@ namespace MiniRambo
 
         private async Task GameStart()
         {
+            lvlText.Text = Lvl.ToString();
             Player.Player_Ellipse.Opacity = 1;
             Game_Canvas.Visibility = Visibility.Visible;
 
@@ -70,7 +77,7 @@ namespace MiniRambo
                         enemySpawningRate = 0;
                     }
 
-                    enemySpawningRate += 1 + (Lvl / 10);
+                    enemySpawningRate += 1 + (Lvl / 5);
                 }
                 await Task.Delay(10);
             }
@@ -88,7 +95,10 @@ namespace MiniRambo
             if (Player.Hp > 0)
                 textStopCanvas.Text = "Pause";
             else
+            {
                 textStopCanvas.Text = "Game Over";
+                AddNewScore();
+            }
 
             if (Stop_Canvas.Visibility == Visibility.Visible)
                 Stop_Canvas.Visibility = Visibility.Hidden;
@@ -97,7 +107,7 @@ namespace MiniRambo
         }
         public void UpdatePoints()
         {
-            scoreText.Text = Score.ToString();
+            scoreText.Text = Current_Score.ToString();
             coinsText.Text = Coins.ToString();
         }
 
@@ -137,6 +147,7 @@ namespace MiniRambo
                 Shop_Canvas.Visibility = Visibility.Visible;
                 nextLvlBar.Value = 0;
                 Lvl += 1;
+                lvlText.Text = Lvl.ToString();
                 gameCanvas.Background = LoadImg("Shop.png");
             }
             else
@@ -166,8 +177,9 @@ namespace MiniRambo
             ClearCanvas();
             Shop_Game.Main_Shop = [0, 0, 0, 0, 0, 0];
             Coins = 0;
-            Score = 0;
+            Current_Score = 0;
             Lvl = 1;
+            lvlText.Text = Lvl.ToString();
             nextLvlBar.Value = 0;
             UpdatePoints();
             Player = new Player_Info(3, 2);
@@ -194,8 +206,6 @@ namespace MiniRambo
             Close();
         }
 
-
-
         private void UpdateStatusBar(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (nextLvlBar.Value >= 100)
@@ -218,11 +228,71 @@ namespace MiniRambo
                 if (parameter != null) 
                     Shop_Game.UpgradeStat(parameter);
             }
+            
         }
-        private void SettingClick(object sender, RoutedEventArgs e)
+        private void LeaderBoard(object sender, RoutedEventArgs e)
         {
+            string filePath = "../../../Scores.xml";
+            if (File.Exists(filePath))
+            {
+                XDocument doc = XDocument.Load(filePath);
+
+                List<Score_Item> scores = new List<Score_Item>();
+
+                if(doc.Root != null)
+                    foreach (var scoreElement in doc.Root.Elements("Score"))
+                    {
+                        if(scoreElement != null)
+                        {
+                            string playerName = scoreElement.Element("PlayerName")?.Value ?? "Unknown";
+                            int scoreValue = int.Parse(scoreElement.Element("ScoreValue")?.Value ?? "Unknown");
+
+                            scores.Add(new Score_Item
+                            {
+                                PlayerName = playerName,
+                                Score = scoreValue
+                            });
+                        }
+
+                    }
+                scores = scores.OrderByDescending(score => score.Score).ToList();
+                for (int i = 0; i < scores.Count; i++)
+                {
+                    scores[i].Rank = i + 1;
+                }
+                scoreListView.ItemsSource = scores;
+            }
+            scoreCanvas.Visibility = Visibility.Visible;
 
         }
 
+        private void AddNewScore()
+        {
+            string filePath = $"../../../Scores.xml";
+
+            if (!File.Exists(filePath))
+            {
+                XDocument xmlDoc = new XDocument(new XElement("Scores"));
+                xmlDoc.Save(filePath);
+            }
+            XDocument doc = XDocument.Load(filePath);
+            XElement newScore = new XElement("Score",
+                                new XElement("PlayerName", _Player_Name),
+                                new XElement("ScoreValue", Current_Score));
+
+            doc.Root?.Add(newScore);
+            doc.Save(filePath);
+        }
+
+        private void CloseLeaderboard(object sender, RoutedEventArgs e)
+        {
+            scoreCanvas.Visibility = Visibility.Hidden;
+        }
+
+        private void TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            _Player_Name = textBox.Text;
+        }
     }
 }

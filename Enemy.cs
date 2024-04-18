@@ -164,7 +164,7 @@ namespace MiniRambo
         {
             if (MainWindow.Instance != null)
             {
-                MainWindow.Instance.Score += 100 * _Current_Lvl * _Type;
+                MainWindow.Instance.Current_Score += 100 * _Current_Lvl * _Type;
                 MainWindow.Instance.Coins += 5 * _Current_Lvl * _Type;
 
                 MainWindow.Instance.nextLvlBar.Value += 100 / (10 * _Current_Lvl);

@@ -77,6 +77,18 @@
             <Setter Property="Panel.ZIndex" Value="100"/>
             <Setter Property="FontFamily" Value="Bahnschrift Light"/>
         </Style>
+
+        <!-- Custom ListView Style -->
+        <Style 
+            x:Key="CustomListViewStyle" TargetType="ListView">
+            <Setter Property="Background" Value="#FF4C4C4C"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled"/>
+        </Style>
     </Window.Resources>
 
     <Viewbox Stretch="Fill">
@@ -91,16 +103,31 @@
                 Opacity="1"
                 Visibility="Visible">
                 <StackPanel
-                    Canvas.Left="550" 
-                    Canvas.Top="200">
+                    Canvas.Left="540" 
+                    Canvas.Top="100">
+                    <TextBlock
+                        Text="MiniRambo"
+                        MinWidth="220"
+                        MinHeight="60"
+                        FontSize="50"
+                        TextAlignment="Center" 
+                        Foreground="#FFFF7500" 
+                        FontFamily="Bahnschrift Light"/>
+                    <TextBox
+                        Margin="0,20,0,20"
+                        Text="PlayerName"
+                        FontSize="40"
+                        MaxWidth="245"
+                        BorderBrush="Transparent" Foreground="#FF00D247" Background="#992C3E50" 
+                        TextChanged="TextChanged"/>
                     <Button 
                         Style="{StaticResource CustomButtonStyle}" 
                         Click="StartGameClick" 
                         Content="Start Game"/>
                     <Button 
                         Style="{StaticResource CustomButtonStyle}" 
-                        Click="SettingClick" 
-                        Content="Settings"/>
+                        Click="LeaderBoard" 
+                        Content="Leader Board"/>
                     <Button 
                         Style="{StaticResource CustomButtonStyle}" 
                         Click="LeaveGame" 
@@ -165,6 +192,20 @@
                             </LinearGradientBrush>
                         </TextBlock.Background>
                     </TextBlock>
+                    <TextBlock
+                        x:Name="lvlText"
+                        Style="{StaticResource CustomTextBlockStyle}"
+                        MinWidth="20"
+                        Canvas.Right="1"
+                        Canvas.Top="80"
+                        Text="0">
+                        <TextBlock.Background>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#B2000000" Offset="1"/>
+                                <GradientStop Color="#B2DCC900" Offset="0.422"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Background>
+                    </TextBlock>
                     <ProgressBar 
                         x:Name="nextLvlBar"
                         Value="0"
@@ -202,7 +243,7 @@
                     Panel.ZIndex="2">
                     <StackPanel
                         Canvas.Left="550" 
-                        Canvas.Top="200">
+                        Canvas.Top="100">
                         <TextBlock
                             x:Name="textStopCanvas"
                             Background="Transparent"
@@ -218,6 +259,12 @@
                         </Button>
                         <Button 
                             Style="{StaticResource CustomButtonStyle}" 
+                            Click="LeaderBoard"
+                            Content="Leader Board">
+                        </Button>
+                        <Button 
+                            Style="{StaticResource CustomButtonStyle}" 
+                            Margin="0"
                             Click="LeaveGame"
                             Content="Exit Game">
                         </Button>
@@ -423,13 +470,47 @@
                         <Button
                             Style="{StaticResource CustomButtonStyle}" 
                             Margin="0,0,0,125"
-                            Content="Leader Board"/>
+                            Content="Leader Board"
+                            Click="LeaderBoard"/>
                         <Button
                             Style="{StaticResource CustomButtonStyle}"
                             Content="Exit"
                             Click="LeaveGame"/>
                     </StackPanel>
                 </Canvas>
+            </Canvas>
+            <!--ScoreCanvas-->
+            <Canvas 
+                x:Name="scoreCanvas"
+                Width="1280" 
+                Height="800"
+                Visibility="Hidden">
+                <Button
+                    Canvas.Left="400"
+                    Canvas.Top="80"
+                    MinWidth="20"
+                    MinHeight="0"
+                    Height="20"
+                    FontSize="20"
+                    Content="X"
+                    Background="DarkRed"
+                    Click="CloseLeaderboard"
+                    Style="{StaticResource CustomButtonStyle}"/>
+                <ListView 
+                    x:Name="scoreListView"
+                    Canvas.Left="400"
+                    Canvas.Top="100"
+                    ItemsSource="{Binding LeaderScores}"
+                    Width="500"
+                    Style="{StaticResource CustomListViewStyle}">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Rank" DisplayMemberBinding="{Binding Rank}" Width="100"/>
+                            <GridViewColumn Header="Player Name" DisplayMemberBinding="{Binding PlayerName}" Width="200"/>
+                            <GridViewColumn Header="Score" DisplayMemberBinding="{Binding Score}" Width="200"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
             </Canvas>
         </Canvas>
     </Viewbox>

@@ -25,9 +25,9 @@ namespace MiniRambo
         public Gun Player_Gun { get; set; }
         public Rect Player_Hitbox { get; set; }
 
-        private List<double> Current_Move { get; set; } = new List<double> { 0, 0 };
-        private Canvas Game_Canvas { get; set; }
-        private Canvas Stop_Canvas { get; set; }
+        private List<double> _Current_Move { get; set; } = new List<double> { 0, 0 };
+        private Canvas _Game_Canvas { get; set; }
+        private Canvas _Stop_Canvas { get; set; }
         private StackPanel Health_Ui { get; set; }
         private bool Player_Hit_Cooldow = true;
         private double MouseX, MouseY;
@@ -42,11 +42,11 @@ namespace MiniRambo
                 Health_Ui = MainWindow.Instance.healthUi;
                 UpdateHealthUi();
 
-                Game_Canvas = MainWindow.Instance.Game_Canvas;
-                Stop_Canvas = MainWindow.Instance.Stop_Canvas;
+                _Game_Canvas = MainWindow.Instance.Game_Canvas;
+                _Stop_Canvas = MainWindow.Instance.Stop_Canvas;
 
-                X = Game_Canvas.Width / 2;
-                Y = Game_Canvas.Height / 2;
+                X = _Game_Canvas.Width / 2;
+                Y = _Game_Canvas.Height / 2;
             }
             else
                 throw new InvalidOperationException();
@@ -55,14 +55,14 @@ namespace MiniRambo
             Player_Gun = new Gun(12 + MainWindow.Instance.Shop_Game.Main_Shop[4], true);
         }
 
-        public void UpdateHealthUi()
+        public void UpdateHealthUi(int bonus = 0)
         {
             while (Health_Ui.Children.Count > 0)
             {
                 Health_Ui.Children.RemoveAt(0);
             }
 
-            for (int i = Health_Ui.Children.Count; i < Hp; i++)
+            for (int i = Health_Ui.Children.Count; i < Hp + bonus; i++)
             {
                 Rectangle rect = new Rectangle();
                 rect.Fill = MainWindow.Instance?.LoadImg("Heart.png");
@@ -78,29 +78,29 @@ namespace MiniRambo
             switch (e.Key)
             {
                 case Key.A:
-                    if (Current_Move[1] == 1) break;
-                    Current_Move[1] = idle ? 0 : -1;
+                    if (_Current_Move[1] == 1) break;
+                    _Current_Move[1] = idle ? 0 : -1;
                     break;
                 case Key.D:
-                    if (Current_Move[1] == -1) break;
-                    Current_Move[1] = idle ? 0 : 1;
+                    if (_Current_Move[1] == -1) break;
+                    _Current_Move[1] = idle ? 0 : 1;
                     break;
                 case Key.W:
-                    if (Current_Move[0] == 1) break;
-                    Current_Move[0] = idle ? 0 : -1;
+                    if (_Current_Move[0] == 1) break;
+                    _Current_Move[0] = idle ? 0 : -1;
                     break;
                 case Key.S:
-                    if (Current_Move[0] == -1) break;
-                    Current_Move[0] = idle ? 0 : 1;
+                    if (_Current_Move[0] == -1) break;
+                    _Current_Move[0] = idle ? 0 : 1;
                     break;
                 case Key.R:
-                    if (idle && Stop_Canvas.Visibility != Visibility.Visible)
+                    if (idle && _Stop_Canvas.Visibility != Visibility.Visible)
                         Player_Gun.Reload();
                     break;
                 case Key.Space:
                     if (idle && Hp > 0 
-                        && Stop_Canvas.Visibility != Visibility.Visible 
-                        && Game_Canvas.Visibility == Visibility.Visible 
+                        && _Stop_Canvas.Visibility != Visibility.Visible 
+                        && _Game_Canvas.Visibility == Visibility.Visible 
                         && MainWindow.Instance?.Shop_Canvas.Visibility != Visibility.Visible)
                             Player_Gun.Shoot();
                     break;
@@ -112,13 +112,13 @@ namespace MiniRambo
             double currentTop = Canvas.GetTop(Player_Ellipse);
 
             if (currentLeft < 0) currentLeft = 1 * Speed;
-            else if (currentLeft > Game_Canvas.Width - Player_Ellipse.Width) currentLeft += -1 * Speed;
+            else if (currentLeft > _Game_Canvas.Width - Player_Ellipse.Width) currentLeft += -1 * Speed;
             else if (currentTop < 0) currentTop += 1 * Speed;
-            else if (currentTop > Game_Canvas.Height - Player_Ellipse.Height) currentTop += -1 * Speed;
+            else if (currentTop > _Game_Canvas.Height - Player_Ellipse.Height) currentTop += -1 * Speed;
             else
             {
-                currentTop += Speed * Current_Move[0];
-                currentLeft += Speed * Current_Move[1];
+                currentTop += Speed * _Current_Move[0];
+                currentLeft += Speed * _Current_Move[1];
             }
 
             Canvas.SetLeft(Player_Ellipse, currentLeft);
@@ -188,7 +188,7 @@ namespace MiniRambo
 
             Canvas.SetLeft(playerEllipse, X);
             Canvas.SetTop(playerEllipse, Y);
-            Game_Canvas.Children.Add(playerEllipse);
+            _Game_Canvas.Children.Add(playerEllipse);
 
             RotateTransform rotateTransform = new RotateTransform();
             rotateTransform.Angle = 0;
